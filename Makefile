@@ -6,7 +6,7 @@
 #    By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 12:44:25 by lnambaji          #+#    #+#              #
-#    Updated: 2023/06/26 16:12:14 by lnambaji         ###   ########.fr        #
+#    Updated: 2023/06/26 16:14:09 by lnambaji         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ GNL_SRCS = gnl/get_next_line.c gnl/get_next_line_utils.c
 
 EXECUTABLES = $(basename $(GNL_SRCS)) $(basename $(MLX_SRCS))
 
-OBJS_GNL = gnl/get_next_line.o gnl/get_next_line_utils.o
+OBJS_GNL = gnl/get_next_line_utils.o
 OBJS_MLX = $(MLX_SRCS:.c=.o)
 
 all: $(EXECUTABLES)
@@ -42,4 +42,5 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+
 #cc -I /usr/local/include test.c -Lmlx -lmlx -framework OpenGL -framework AppKit
