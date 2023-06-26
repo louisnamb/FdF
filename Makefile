@@ -42,3 +42,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+#cc -I /usr/local/include test.c -Lmlx -lmlx -framework OpenGL -framework AppKit
