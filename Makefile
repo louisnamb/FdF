@@ -6,43 +6,33 @@
 #    By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 12:44:25 by lnambaji          #+#    #+#              #
-#    Updated: 2023/06/27 10:12:56 by lnambaji         ###   ########.fr        #
+#    Updated: 2023/06/28 10:46:23 by lnambaji         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra -D BUFFER_SIZE=1024
-MLXFLAGS = -lmlx -framework OpenGL -framework AppKit
-RM = rm -f
+CC = cc
 
-MLX_SRCS = test.c
-GNL_SRCS = gnl/get_next_line.c gnl/get_next_line_utils.c
+CFLAGS = -Wall -Werror -Wextra -D BUFFER_SIZE=1024 -g
 
-EXECUTABLES = $(basename $(GNL_SRCS)) $(basename $(MLX_SRCS))
+MLXFLAGS = -I /usr/local/include
 
-OBJS_GNL = $(GNL_SRCS:.c=.o)
-OBJS_MLX = $(MLX_SRCS:.c=.o)
+LDFLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 
-all: $(EXECUTABLES)
+SOURCES = test.c gnl/get_next_line.c gnl/get_next_line_utils.c
 
-$(EXECUTABLES): %: %.o $(OBJS_MLX) $(OBJS_GNL)
-	$(CC) $(CFLAGS) -I /usr/local/include $< $(OBJS_MLX) $(OBJS_GNL) \
-	-Lmlx $(MLXFLAGS) -o $@
+OBJECTS = $(SOURCES:.c=.o)
 
-$(OBJS_MLX): %.o: %.c
-	$(CC) $(CFLAGS) -I /usr/local/include -c $< -o $@
+EXECUTABLE = fdf
 
-$(OBJS_GNL): %.o: %.c
-	$(CC) $(CFLAGS) -I /usr/local/include -c $< -o $@
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(CFLAGS) $(MLXFLAGS) $(OBJECTS) $(LDFLAGS) -o $(EXECUTABLE)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(EXECUTABLES) $(OBJS_GNL) $(OBJS_MLX)
-
-fclean: clean
-
-re: fclean all
-
-.PHONY: all clean fclean re
-
+	rm -f $(OBJECTS) $(EXECUTABLE)
 
 #cc -I /usr/local/include test.c -Lmlx -lmlx -framework OpenGL -framework AppKit
