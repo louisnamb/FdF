@@ -6,7 +6,7 @@
 #    By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 12:44:25 by lnambaji          #+#    #+#              #
-#    Updated: 2023/06/28 11:49:20 by lnambaji         ###   ########.fr        #
+#    Updated: 2023/06/28 11:58:04 by lnambaji         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ MLXFLAGS = -I /usr/local/include
 
 LDFLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 
-SOURCES = main.c gnl/get_next_line.c gnl/get_next_line_utils.c event_handlers.c
+SOURCES = main.c gnl/get_next_line.c gnl/get_next_line_utils.c \
+	event_handlers.c draw_.c
 
 OBJECTS = $(SOURCES:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/06/28 11:49:42 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/06/28 11:55:39 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,29 +19,6 @@ void	mlx_put_pix(t_data *data, int x, int y, int colour)
 	dst = data->addr + (y * data->linelen + x * (data->bitsperpix / 8));//iterates over every line
 	//iterate over each pixel 0 + 4 * (desiredpix)
 	*(unsigned int *)dst = colour;
-}
-
-void	draw_square(t_data *mlx, int x, int x_bound, int height, char which)
-{
-	int	thickness;
-
-	thickness = 5;
-	if (which == 'x')
-	{
-		while (thickness--)
-		{
-			while (x++ < x_bound)
-				mlx_put_pix(mlx, x, height, 0x00FF0000);
-		}
-	}
-	else
-	{
-		while (thickness--)
-		{
-			while (x_bound++ < height)
-				mlx_put_pix(mlx, x, x_bound, 0x00FF0000);
-		}
-	}
 }
 
 int main(void)
