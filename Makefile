@@ -6,7 +6,7 @@
 #    By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 12:44:25 by lnambaji          #+#    #+#              #
-#    Updated: 2023/06/28 10:46:23 by lnambaji         ###   ########.fr        #
+#    Updated: 2023/06/28 11:49:20 by lnambaji         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ MLXFLAGS = -I /usr/local/include
 
 LDFLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 
-SOURCES = test.c gnl/get_next_line.c gnl/get_next_line_utils.c
+SOURCES = main.c gnl/get_next_line.c gnl/get_next_line_utils.c event_handlers.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
@@ -35,4 +35,7 @@ $(EXECUTABLE): $(OBJECTS)
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE)
 
+fclean: clean
+
+re: fclean all
 #cc -I /usr/local/include test.c -Lmlx -lmlx -framework OpenGL -framework AppKit
