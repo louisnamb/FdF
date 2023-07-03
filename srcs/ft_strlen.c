@@ -1,36 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_.c                                            :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/06/29 12:41:24 by lnambaji         ###   ########.fr       */
+/*   Created: 2023/04/06 10:22:19 by lnambaji          #+#    #+#             */
+/*   Updated: 2023/04/06 12:59:16 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "ft_printf.h"
 
-void	draw_square(t_data *mlx, int x, int x_bound, int height, char which)
+size_t	ft_strlen(const char *s)
 {
-	int	thickness;
+	size_t	i;
 
-	thickness = 5;
-	if (which == 'x')
-	{
-		while (thickness--)
-		{
-			while (x++ < x_bound)
-				mmlx_put_pix(mlx, x, height, 0x00FF0000);
-		}
-	}
-	else
-	{
-		while (thickness--)
-		{
-			while (x_bound++ < height)
-				mmlx_put_pix(mlx, x, x_bound, 0x00FF0000);
-		}
-	}
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }

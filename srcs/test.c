@@ -1,36 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_.c                                            :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/06/29 12:41:24 by lnambaji         ###   ########.fr       */
+/*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
+/*   Updated: 2023/06/28 11:24:50 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "mlx.h"
 
-void	draw_square(t_data *mlx, int x, int x_bound, int height, char which)
+typedef struct	window_info {
+	void	*mlx;
+	void	*img;
+	char	*addr;
+	int		bitsperpix;
+	int		linelen;
+	int		endian;
+	void	*win;
+}	t_data;
+
+void	mlx_put_pix(t_data *data, int x, int y, int colour)
 {
-	int	thickness;
+	char	*dst;
 
-	thickness = 5;
-	if (which == 'x')
-	{
-		while (thickness--)
-		{
-			while (x++ < x_bound)
-				mmlx_put_pix(mlx, x, height, 0x00FF0000);
-		}
-	}
-	else
-	{
-		while (thickness--)
-		{
-			while (x_bound++ < height)
-				mmlx_put_pix(mlx, x, x_bound, 0x00FF0000);
-		}
-	}
+	dst = data->addr + (y * data->linelen + x * (data->bitsperpix / 8));//iterates over every line
+	//iterate over each pixel 0 + 4 * (desiredpix)
+	*(unsigned int *)dst = colour;
 }
+

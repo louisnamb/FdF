@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_.c                                            :+:      :+:    :+:   */
+/*   event_handlers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/06/29 12:41:24 by lnambaji         ###   ########.fr       */
+/*   Created: 2023/06/28 11:46:04 by lnambaji          #+#    #+#             */
+/*   Updated: 2023/06/28 11:48:43 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	draw_square(t_data *mlx, int x, int x_bound, int height, char which)
+int	insidewin(int keycode, t_data *hook)
 {
-	int	thickness;
+	mlx_destroy_window(hook->mlx, hook->win);
+	printf("keycode: %d\n", keycode);
+	(void)keycode;
+	exit(0);
+	return (0);
+}
 
-	thickness = 5;
-	if (which == 'x')
-	{
-		while (thickness--)
-		{
-			while (x++ < x_bound)
-				mmlx_put_pix(mlx, x, height, 0x00FF0000);
-		}
-	}
-	else
-	{
-		while (thickness--)
-		{
-			while (x_bound++ < height)
-				mmlx_put_pix(mlx, x, x_bound, 0x00FF0000);
-		}
-	}
+int	xbutton(int button, int x, int y, t_data *hook)
+{
+	if ((x >= 0 && x <= 50) && (y >= 0 && y <= 50))// <= 1920) && (y >= 0 && y <= 1080))
+		printf("button clicked\n");
+	(void)hook;
+	(void)button;
+	return (0);
 }
