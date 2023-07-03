@@ -11,32 +11,42 @@
 # **************************************************************************** #
 
 CC = cc
-
 CFLAGS = -Wall -Werror -Wextra -D BUFFER_SIZE=1024 -g
-
-MLXFLAGS = -I /usr/local/include
-
+MLXDIR = mlx
+MLXFLAGS = -I$(MLXDIR) -I/usr/local/include
 LDFLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 
-SOURCES = main.c gnl/get_next_line.c gnl/get_next_line_utils.c \
-	event_handlers.c draw_.c read_map.c libft/ft_split.c libft/ft_strjoin.c
+SOURCES = srcs
+OBJECTS = objs
+INCLUDES = includes
 
-OBJECTS = $(SOURCES:.c=.o)
+SRCS = $(wildcard $(SOURCES)/*.c)
+OBJS = $(patsubst $(SOURCES)/%.c, $(OBJECTS)/%.o, $(SRCS))
 
 EXECUTABLE = fdf
+BINDIR = bin
+BIN = $(BINDIR)/main
 
-all: $(EXECUTABLE)
+RED = \033[0;31m
+DEFAULT = \033[0m
+GREEN = \033[0;32m
+CYAN = \033[0;36m
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(CFLAGS) $(MLXFLAGS) $(OBJECTS) $(LDFLAGS) -o $(EXECUTABLE)
+all: $(BIN)
+	@echo "$(GREEN)Successfully built fdf!$(DEFAULT)"
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(BIN): $(OBJS)
+	@$(CC) $(CFLAGS) $(MLXFLAGS) $(OBJS) $(LDFLAGS) -o $(EXECUTABLE)
+
+$(OBJECTS)/%.o: $(SOURCES)/%.c
+	@$(CC) $(CFLAGS) -I$(INCLUDES) -I$(MLXDIR) -c $< -o $@
 
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+	@echo "$(RED)Cleaned$(DEFAULT)"
+	@rm -f $(OBJECTS)/* $(BIN)
 
 fclean: clean
 
 re: fclean all
-#cc -I /usr/local/include test.c -Lmlx -lmlx -framework OpenGL -framework AppKit
+
+#cc -I /usr/local/include test.c -Lmlx -lmlx -frmework OpenGL -framework AppKit
