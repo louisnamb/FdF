@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/06/29 15:36:08 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:34:40 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,8 @@ int main(int argc, char **argv)
 
 	i = 935;
 	j = 5;
-	printf("expecting argv: '%s'\n", argv[1]);
 	if (argc == 2)
-	{
 		read_map(argv[1]);
-	}
 	else
 		write(1, "Error: Invalid arguments", 27);
 	return (1);

@@ -58,7 +58,9 @@ char	*get_currline(int fd, char *buffer, char **nbuff, char *rval)
 	if (character)
 		*nbuff = ft_free(nbuff, ft_strdup(ft_strchr(*nbuff, '\n') + 1));
 	else
+	{
 		*nbuff = ft_free(nbuff, ft_strdup(ft_strchr(*nbuff, '\0')));
+	}
 	return (rval);
 }
 
