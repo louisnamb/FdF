@@ -6,13 +6,13 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 14:24:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/07/05 11:41:02 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/07/05 13:06:55 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-map read_map(char *filename)
+details read_map(char *filename)
 {
 	char	*result;
 	char	**split_str;
@@ -22,43 +22,53 @@ map read_map(char *filename)
 	i = 0;
 	char	*tmp;
 	char	*eachline;
-	int	columns = 0;
+	int	column = 0;
 	int row = 0;
 	int	j = 0;
 	int p = 0;
 
 	path = ft_strjoin("/Users/lnambaji/Documents/Cursus/fdf/", filename);
-	map details = {0, 0, NULL};
+	details *map = malloc(sizeof(details));
+	map->rowcount = 0;
+	map->columncount = 0;
+	map->arr = NULL;
 	fd = open(path, O_RDWR);
 	if (fd == -1) {
 		perror("Couldn't open the file. Try again.");
-		return (details);
+		return (*map);
 	}
 	result = get_next_line(fd);
     while (result)
 	{
-		details.rowcount++;
+		map->rowcount++;
 		tmp = result;
-
-		break_down(result);
 	    result = get_next_line(fd);
 	}
 	split_str = ft_split(tmp, ' ');
-	while (split_str[details.columncount])
-		details.columncount++;
+	while (split_str[map->columncount])
+		map->columncount++;
+	close(fd);
+	fd = open(path, O_RDWR);
 	eachline = get_next_line(fd);
-	printf("rowcount: %d: column: %d\n", details.rowcount, details.columncount);
-	printf("eachline: %s\n", eachline);
-	details.arr = malloc(sizeof(int) * details.rowcount * details.columncount);
-	while (eachline)
+	map->arr = malloc(sizeof(int *) * map->rowcount);// * map->columncount);
+	if (!map->arr)
+		return (*map);
+	while (eachline && row <= map->rowcount && column <= map->columncount)
 	{
+		printf("inside loop row: %d columncount: %d\n", row, map->columncount);
+		map->arr[row] = malloc(sizeof(int) * map->columncount);
 		split_str = ft_split(eachline, ' ');
-		columns = 0;
-		while (split_str[columns])
+		if (!map->arr[row] || !split_str)
+			return (*map);
+		column = 0;
+		printf("louis: %d ft_isdigit: %d\n", ft_isdigit(split_str[column][0]), split_str[column][0]);
+		while (ft_isdigit(split_str[column][0]))
 		{
-			details.arr[row][columns] = ft_atoi(split_str[columns]);
-			columns++;
+			printf("gfsdfdsdfgdfg: %d ", map->arr[row][column]);
+			map->arr[row][column] = ft_atoi(split_str[column]);
+			column++;
 		}
+		printf("df\n");
 		free(split_str);
 		split_str = NULL;
 		eachline = get_next_line(fd);
@@ -68,17 +78,17 @@ map read_map(char *filename)
 	//	free(result);
 	//i++;
 	close(fd);
-	free(result);
-	free(eachline);
-	while (j < details.rowcount)
+	while (j < map->rowcount)
 	{
-		while (p < details.columncount)
+		printf("j: %d map->rowcount: %d p: %d columncount: %d\n", j, map->rowcount, p, map->columncount);
+		while (p < map->columncount)
 		{
-			printf("%d", details.arr[j][p]);
+			printf("out\n");
+			printf("%d", map->arr[j][p]);
 			p++;
 		}
 		printf("\n");
 		j++;
 	}
-	return (details);
+	return (*map);
 }
