@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 14:24:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/07/05 13:06:55 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/07/06 11:08:28 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ details read_map(char *filename)
 	close(fd);
 	fd = open(path, O_RDWR);
 	eachline = get_next_line(fd);
-	map->arr = malloc(sizeof(int *) * map->rowcount);// * map->columncount);
+	map->arr = malloc(sizeof(int *) * map->rowcount * map->columncount);
 	if (!map->arr)
 		return (*map);
 	while (eachline && row <= map->rowcount && column <= map->columncount)
