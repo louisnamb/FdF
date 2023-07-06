@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/07/06 14:29:47 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/07/06 15:53:10 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ void		mmlx_put_pix(t_data *data, int x, int y, int colour);
 
 int			esc(int keycode, t_data *hook);
 
-void		draw_square(t_data *mlx, int x, int x_bound, int height, char which);
+void		draw_square(t_data *mlx, int x, int x_bound, int height);
+
+void		draw_point(t_data *mlx, int x, int y);
 
 int			mouse_move(int button, int x, int y, t_data *hook);
 
@@ -61,3 +63,5 @@ int			ft_isdigit(int c);
 int			xbutton(t_data *hook);// int x, int y, t_data *hook);
 
 int			mouse_hook(int keycode, int button, int x, int y, t_data *hook);
+
+int			controls(int keycode, t_data *hook);
