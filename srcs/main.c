@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/07 13:07:58 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:42:31 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	mmlx_put_pix(t_data *data, int x, int y, int colour)
 {
 	char	*dst;
 
+	if (x < 0 || x >= data->width || y < 0 || y >= data->height)
+		return ;
 	dst = data->addr + (y * data->linelen + x * (data->bitsperpix / 8));
 	*(unsigned int *)dst = colour;
 }
@@ -35,18 +37,17 @@ int main(int argc, char **argv)
 	}
 	/* Initialisation */
 	mlx.mlx = mlx_init();
-	mlx.win = mlx_new_window(mlx.mlx, 1920, 1080, "fdf");
-	mlx.img = mlx_new_image(mlx.mlx, 1920, 1080);
+	mlx.width = 1920;
+	mlx.height = 1080;
+	mlx.win = mlx_new_window(mlx.mlx, mlx.width, mlx.height, "fdf");
+	mlx.img = mlx_new_image(mlx.mlx, mlx.width, mlx.height);
 	mlx.addr = mlx_get_data_addr(mlx.img, &mlx.bitsperpix, &mlx.linelen, &mlx.endian);
 	
 	/* Draw lines */
-//	mmlx_put_pix(&mlx, 1920/2, 1080/2, 0xF00000);
-	//mmlx_put_pix(&mlx, 1920/2+10, 1080/2+10, 0xF00000);
-//	mlx_pixel_put(&mlx.mlx, &mlx.win, 1920/2-10, 1080/2-10, 0xF00000);
-	draw_bresenham_line(&mlx, 1920, 1080, 0, 0, 0xF00000);
-//	draw_bresenham_line(&mlx, 0, 0, 1920, 1080, 0xF00000);
-//	draw_line(&mlx.mlx, &mlx.win, 1920, 1080, 0, 0, 0xFFFFFF);
-
+	draw_bresenham_line(&mlx, 920, 540, 970, 590, 0xF00000);
+	draw_bresenham_line(&mlx, 990, 540, 1040, 590, 0xF00000);
+	draw_bresenham_line(&mlx, 920, 540, 990, 540, 0xF00000);
+	draw_bresenham_line(&mlx, 970, 565, 1040, 565, 0xF00000);
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
 	/* Hooks and Controls */ 
 	mlx_mouse_hook(mlx.win, mouse_hook, mlx.mlx);

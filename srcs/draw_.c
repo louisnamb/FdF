@@ -6,40 +6,28 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/07 13:16:23 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/07 15:45:42 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	draw_square(t_data *mlx, int x, int x_bound, int height)//, char which)
+void	draw_square(t_data *mlx, int bX, int bY, int fX, int fY, int color)
 {
-	int	thickness;
-//	int x_original = x;
-//	int y_original = x_bound;
-	thickness = 5;
-
-	while (thickness--)
-	{
-		while (x++ < x_bound)
-			mlx_pixel_put(mlx->mlx, mlx->win, x, x_bound, 0x00FF0000);
-	}
-			//mmlx_put_pix(mlx, x, height, 0x00FF0000);
-	while (thickness--)
-	{
-		while (x_bound++ < height)
-			mlx_pixel_put(mlx->mlx, mlx->win, x, x_bound, 0x00FF0000);
-	}
-	//		mmlx_put_pix(mlx, x, x_bound, 0x00FF0000);
+//	draw_bresenham_line(&mlx, 920, 540, 970, 590, 0xF00000);
+//	draw_bresenham_line(&mlx, 990, 540, 1040, 590, 0xF00000);
+//	draw_bresenham_line(&mlx, 920, 540, 990, 540, 0xF00000);
+//	draw_bresenham_line(&mlx, 970, 565, 1040, 565, 0xF00000);
+	draw_bresenham_line(mlx, bX, bY, fX, fY, 0xFFFFFF);//white
+	draw_bresenham_line(mlx, bX + 70, bY, fX + 50, fY, 0x0000FF); //blue
+	draw_bresenham_line(mlx, bX, bY, bX + 70, bY, 0xFFFF00); //yellow
+	draw_bresenham_line(mlx, fX, bX + 25, fX + 70, bX, color);//red
+	return ;
 }
 /*
 Use mlx_pixel_put to avoid screen tears and seg faults. goal is to create a square
 that you can use your wasd keys to move
 */
-void	draw_point(t_data *mlx, int x, int y)
-{
-	mmlx_put_pix(mlx, x, y, 0x00FF0000);
-}
 
 void		draw_bresenham_line(t_data *mlx, int startX, int startY, int endX, int endY, int color)
 {
@@ -48,19 +36,17 @@ void		draw_bresenham_line(t_data *mlx, int startX, int startY, int endX, int end
 	int	deltaX;
 	int deltaY;
 	int	diff;
-	int	tmp;
 
 	if (startX > endX && startY > endY)
-	{
-		tmp = startX;
-		startX = endX;
-		endX = tmp;
-		tmp = startY;
-		startY = endY;
-		endY = tmp;
-	}
+		draw_bresenham_line(mlx, endX, endY, startX, startY, color);
 	deltaX = endX - startX;
 	deltaY = endY - startY;
+	height = 1;
+	if (deltaY < 0)
+	{
+		height = -1;
+		deltaY = deltaY * -1;
+	}
 	y = startY;
 	x = startX;
 	diff = 2 * deltaY - deltaX;
