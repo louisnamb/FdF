@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 14:24:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/07/06 13:46:14 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/08 14:19:55 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ details read_map(char *filename)
 		perror("Couldn't open the file. Try again.");
 		return ((details){0, 0, 0, 0, NULL});//return (*map);
 	}
+	map->r_pos = 0;
 	map->rowcount = ft_rowlen(path);
 	eachline = get_next_line(fd);
 	map->columncount = ft_columnlen(ft_split(eachline, ' '));

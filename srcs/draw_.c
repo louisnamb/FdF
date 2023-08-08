@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/07 15:45:42 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/08 15:06:40 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,22 @@ Use mlx_pixel_put to avoid screen tears and seg faults. goal is to create a squa
 that you can use your wasd keys to move
 */
 
+void		draw_vertical(t_data *mlx, int startX, int startY, int endX, int endY, int color)
+{
+	int	y;
+	int	x;
+	if (startY < endY)
+		return (draw_vertical(mlx, endX, endY, startX, startY, color));
+	x = startX;
+	y = startY;
+	while (y >= endY)
+	{
+		mmlx_put_pix(mlx, x, y, color);
+		y--;
+	}
+	return ;
+}
+
 void		draw_bresenham_line(t_data *mlx, int startX, int startY, int endX, int endY, int color)
 {
 	int	x;
@@ -37,16 +53,14 @@ void		draw_bresenham_line(t_data *mlx, int startX, int startY, int endX, int end
 	int deltaY;
 	int	diff;
 
-	if (startX > endX && startY > endY)
-		draw_bresenham_line(mlx, endX, endY, startX, startY, color);
+	if (startX == endX)
+		return (draw_vertical(mlx, startX, startY, endX, endY, color));
+	else if (startX > endX && startY >= endY)
+		return (draw_bresenham_line(mlx, endX, endY, startX, startY, color));
 	deltaX = endX - startX;
 	deltaY = endY - startY;
-	height = 1;
 	if (deltaY < 0)
-	{
-		height = -1;
 		deltaY = deltaY * -1;
-	}
 	y = startY;
 	x = startX;
 	diff = 2 * deltaY - deltaX;
@@ -61,6 +75,35 @@ void		draw_bresenham_line(t_data *mlx, int startX, int startY, int endX, int end
 		else
 			diff = diff + 2 * deltaY;
 		x++;
+	}
+	return ;
+}
+
+void	draw_grid(t_data *mlx, details *map)
+{
+	int	columns;
+	int	rows;
+	int	default_x;
+	int	y_coor;
+
+	default_x = 920;
+	y_coor = 470;
+	rows = 0;
+	while (rows <= map->rowcount)
+	{
+		columns = 0;
+		while (columns <= map->columncount)
+		{
+			if (columns < map->columncount)
+				draw_bresenham_line(mlx, default_x, y_coor, default_x + 70, y_coor, 0xF00000);//red horizontal 
+			if (rows != 0)
+				draw_bresenham_line(mlx, default_x, y_coor, default_x, y_coor - 70, 0x0000FF);//blue vertical good
+			columns++;
+			default_x += 70;
+		}
+		default_x = 920;
+		y_coor += 70;
+		rows++;
 	}
 	return ;
 }
