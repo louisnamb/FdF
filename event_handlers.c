@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:04 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/04 10:49:53 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/09 10:53:41 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int		controls(int keycode, t_data *hook)
 	int y;
 	x = 935;
 	y = 1035;
-	int z = 100;
+	// int z = 100;
 	// draw_square(hook, x, y, z, 'x');
 	// z = 200;
 	// draw_square(hook, x, y, z, 'x');
@@ -72,11 +72,11 @@ int		controls(int keycode, t_data *hook)
 	// x = 1035;
 	// draw_square(hook, x, y, z, 'y');
 	printf("keycode: %d\n", keycode);
-	if (keycode == 13) // W (y goes up)
-	{
-		y++;
-		draw_square(hook, x, y, z);//, 'x');
-	}
+//	if (keycode == 13) // W (y goes up)
+//	{
+//		y++;
+//		draw_square(hook, x, y, z, 'x');//, 'x');
+//	}
 //	else if (keycode == 0) // A (x goes down)
 //		x++;
 //	else if (keycode == 1) // S (y goes down)
