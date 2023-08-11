@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/08 15:06:40 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/11 12:14:46 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,31 +79,50 @@ void		draw_bresenham_line(t_data *mlx, int startX, int startY, int endX, int end
 	return ;
 }
 
+double	rx_x(int x , int y, int z)
+{
+	return ((1 * x + 0 * y + z * 0));
+}
+
+double	rx_y(int x, int y, int z)
+{
+	return ((0 * x + y * cos(45) + z * -sin(45)));
+}
+
 void	draw_grid(t_data *mlx, details *map)
 {
-	int	columns;
-	int	rows;
-	int	default_x;
-	int	y_coor;
+	int	c;
+	int	r;
+	int	x_c;
+	int	y_c;
 
-	default_x = 920;
-	y_coor = 470;
-	rows = 0;
-	while (rows <= map->rowcount)
+	x_c = 330;
+	y_c = 330;
+	r = 0;
+	while (r + 1 < map->rowcount)
 	{
-		columns = 0;
-		while (columns <= map->columncount)
+		c = 0;
+		while (c < map->columncount)
 		{
-			if (columns < map->columncount)
-				draw_bresenham_line(mlx, default_x, y_coor, default_x + 70, y_coor, 0xF00000);//red horizontal 
-			if (rows != 0)
-				draw_bresenham_line(mlx, default_x, y_coor, default_x, y_coor - 70, 0x0000FF);//blue vertical good
-			columns++;
-			default_x += 70;
+			if (c < map->columncount)
+			//draw_bresenham_line(mlx, x_c, y_c, x_c + 70, y_c, 0xF00000);//red horizontal 
+				draw_bresenham_line(mlx, 
+				(int)rx_x(x_c, y_c, map->arr[r][c]), 
+				(int)rx_y(x_c, y_c, map->arr[r][c]), 
+				(int)rx_x(x_c + 70, y_c, map->arr[r + 1][c]), 
+				(int)rx_y(x_c, y_c, map->arr[r + 1][c]), 0xF00000);//red horizontal 
+			if (r != 0)
+				draw_bresenham_line(mlx, 
+				(int)rx_x(x_c, y_c, map->arr[r][c]), 
+				(int)rx_y(x_c, y_c, map->arr[r][c]),
+				(int)rx_x(x_c, y_c, map->arr[r][c]),
+				(int)rx_y(x_c, y_c - 70, map->arr[r + 1][c]), 0x0000FF);//blue vertical good
+			c++;
+			x_c += 70;
 		}
-		default_x = 920;
-		y_coor += 70;
-		rows++;
+		x_c = 330;
+		y_c += 70;
+		r++;
 	}
 	return ;
 }

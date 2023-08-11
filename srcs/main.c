@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/08 14:14:05 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/11 11:25:11 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 		display = read_map(argv[1]);
 	else
 	{
-		write(1, "Error: Invalid arguments\n", 28);
+		write(1, "Error: Invalid arguments\n", 25);
 		exit(1);
 		return (1);
 	}
