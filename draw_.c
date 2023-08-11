@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/09 12:27:02 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/11 12:20:21 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,51 +79,50 @@ void		draw_bresenham_line(t_data *mlx, int startX, int startY, int endX, int end
 	return ;
 }
 
-double	rotation_x(int x , int y, int z)
+double	rx_x(int x , int y, int z)
 {
-	return ((1 * x + 0 * x + x * 0) + (0 * y + y * cos(45) + y * -sin(45)) + (0 * z + z * sin(45) + z * cos(45)));
+	return ((1 * x + 0 * y + z * 0));
 }
 
-double	rotation_y(int x, int y, int z)
+double	rx_y(int x, int y, int z)
 {
-	return ((cos(45) * x + 0 * x + sin(45) * x) + (0 * y + 1 * y + 0 * y) + (-sin(45) * z + 0 * z + cos(45) * z));
+	return ((0 * x + y * cos(45) + z * -sin(45)));
 }
 
 void	draw_grid(t_data *mlx, details *map)
 {
-	int	columns;
-	int	rows;
-	int	default_x;
-	int	y_coor;
+	int	c;
+	int	r;
+	int	x_c;
+	int	y_c;
 
-	default_x = 660;
-	y_coor = 330;
-	rows = 0;
-	while (rows <= map->rowcount)
+	x_c = 330;
+	y_c = 330;
+	r = 0;
+	while (r + 1 < map->rowcount)
 	{
-		columns = 0;
-		while (columns <= map->columncount)
+		c = 0;
+		while (c < map->columncount)
 		{
-
-			if (columns < map->columncount)
-			//draw_bresenham_line(mlx, default_x, y_coor, default_x + 70, y_coor, 0xF00000);//red horizontal 
+			if (c < map->columncount)
+			//draw_bresenham_line(mlx, x_c, y_c, x_c + 70, y_c, 0xF00000);//red horizontal 
 				draw_bresenham_line(mlx, 
-				(int)rotation_x(default_x, y_coor, map->arr[rows][columns]), 
-				(int)rotation_y(default_x, y_coor, map->arr[rows][columns]), 
-				(int)rotation_x(default_x + 70, y_coor, map->arr[rows + 1][columns]), 
-				(int)rotation_y(default_x, y_coor, map->arr[rows + 1][columns]), 0xF00000);//red horizontal 
-			if (rows != 0)
+				(int)rx_x(x_c, y_c, map->arr[r][c]), 
+				(int)rx_y(x_c, y_c, map->arr[r][c]), 
+				(int)rx_x(x_c + 70, y_c, map->arr[r + 1 == map->rowcount][c]), 
+				(int)rx_y(x_c, y_c, map->arr[r + 1 == map->rowcount][c]), 0xF00000);//red horizontal 
+			if (r != 0)
 				draw_bresenham_line(mlx, 
-				(int)rotation_x(default_x, y_coor, map->arr[rows][columns]), 
-				(int)rotation_y(default_x, y_coor, map->arr[rows][columns]),
-				(int)rotation_x(default_x, y_coor, map->arr[rows][columns]),
-				(int)rotation_y(default_x, y_coor - 70, map->arr[rows + 1][columns]), 0x0000FF);//blue vertical good
-			columns++;
-			default_x += 70;
+				(int)rx_x(x_c, y_c, map->arr[r][c]), 
+				(int)rx_y(x_c, y_c, map->arr[r][c]),
+				(int)rx_x(x_c, y_c, map->arr[r][c]),
+				(int)rx_y(x_c, y_c - 70, map->arr[(r + 1 == map->rowcount)][c]), 0x0000FF);//blue vertical good
+			c++;
+			x_c += 70;
 		}
-		default_x = 660;
-		y_coor += 70;
-		rows++;
+		x_c = 330;
+		y_c += 70;
+		r++;
 	}
 	return ;
 }
