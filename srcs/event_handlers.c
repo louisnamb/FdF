@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:04 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/07/06 15:45:23 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/14 10:33:13 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,14 @@ int		controls(int keycode, t_data *hook)
 	int y;
 	x = 935;
 	y = 1035;
-	int z = 100;
+/*
+Keycode for controls
+	W: 13
+	A: 0
+	S: 1
+	D: 2
+*/
+	// int z = 100;
 	// draw_square(hook, x, y, z, 'x');
 	// z = 200;
 	// draw_square(hook, x, y, z, 'x');
@@ -72,12 +79,12 @@ int		controls(int keycode, t_data *hook)
 	// x = 1035;
 	// draw_square(hook, x, y, z, 'y');
 	printf("keycode: %d\n", keycode);
-	if (keycode == 13) // W (y goes up)
-	{
-		y++;
-		draw_square(hook, x, y, z, 'x');
-	}
-//~~	else if (keycode == 0) // A (x goes down)
+//	if (keycode == 13) // W (y goes up)
+//	{
+//		y++;
+//		draw_square(hook, x, y, z, 'x');//, 'x');
+//	}
+//	else if (keycode == 0) // A (x goes down)
 //		x++;
 //	else if (keycode == 1) // S (y goes down)
 //		y--;
@@ -91,6 +98,6 @@ int		controls(int keycode, t_data *hook)
 //	draw_square(hook, x, y, z, 'y');
 //	x = 1035;
 //	draw_square(hook, x, y, z, 'y');
-	mlx_put_image_to_window(hook.mlx, hook.win, hook.img, x, y);
+	mlx_put_image_to_window(hook->mlx, hook->win, hook->img, x, y);
 	return (0);
 }

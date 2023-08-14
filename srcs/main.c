@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/11 11:25:11 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/14 15:47:15 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ void	mmlx_put_pix(t_data *data, int x, int y, int colour)
 		return ;
 	dst = data->addr + (y * data->linelen + x * (data->bitsperpix / 8));
 	*(unsigned int *)dst = colour;
+}
+
+void	afterte(t_data *mlx, int x, int y, int color)
+{
+	int	*buffer;
+
+	buffer = mlx->addr;
+	buffer[(y * mlx->linelen / 4) + x] = color;
 }
 
 void	initialisation(t_data *mlx)
@@ -55,12 +63,6 @@ int main(int argc, char **argv)
 	}
 	initialisation(&mlx);
 	draw_grid(&mlx, &display);
-	/* Draw lines */
-//	draw_bresenham_line(&mlx, 920, 470, 920, 540, 0x0000FF);
-//	draw_bresenham_line(&mlx, 920, 470, 990, 470, 0xF00000);
-//	draw_bresenham_line(&mlx, 990, 540, 920, 540, 0xF00000);
-//	draw_bresenham_line(&mlx, 970, 565, 1040, 565, 0xF00000);
-//	mlx_loop_hook(mlx.mlx, render_next_frame, mlx)
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
 	mlx_loop(mlx.mlx);
 	return (0);
