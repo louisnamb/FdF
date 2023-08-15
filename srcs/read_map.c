@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 14:24:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/08 14:19:55 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/15 13:05:20 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int		ft_rowlen(char *path)
 	return (rows);
 }
 
-details read_map(char *filename)
+details *read_map(char *filename)
 {
 	char	**split_str;
 	int		fd;
@@ -56,28 +56,36 @@ details read_map(char *filename)
 
 	path = ft_strjoin("/Users/lnambaji/Documents/Cursus/fdf/", filename);
 	map = malloc(sizeof(details));
+	if (!map)
+		return (&(details){0, 0, 0, 0, NULL, 0, 1});
 	fd = open(path, O_RDWR);
 	if (fd == -1) {
 		perror("Couldn't open the file. Try again.");
-		return ((details){0, 0, 0, 0, NULL});//return (*map);
+		return (&(details){0, 0, 0, 0, NULL, 0, 1});//return (*map);
 	}
 	map->r_pos = 0;
+	map->minvalue = 0;
+	map->maxvalue = 1;
 	map->rowcount = ft_rowlen(path);
 	eachline = get_next_line(fd);
 	map->columncount = ft_columnlen(ft_split(eachline, ' '));
 	map->arr = malloc(sizeof(int *) * map->rowcount);
 	if (!map->arr || !map->rowcount || !map->columncount)
-		return ((details){0, 0, 0, 0, NULL});//return (*map);
+		return (&(details){0, 0, 0, 0, NULL, 0, 1});//return (*map);
 	while (map->r_pos < map->rowcount)
 	{
 		map->arr[map->r_pos] = malloc(sizeof(int) * map->columncount);
 		split_str = ft_split(eachline, ' ');
 		if (!map->arr[map->r_pos] || !split_str)
-			return ((details){0, 0, 0, 0, NULL});//return (*map);
+			return (&(details){0, 0, 0, 0, NULL, 0, 1});//return (*map);
 		map->c_pos = 0;
 		while (map->c_pos < map->columncount)
 		{
 			map->arr[map->r_pos][map->c_pos] = ft_atoi(split_str[map->c_pos]);
+			if (map->arr[map->r_pos][map->c_pos] > map->maxvalue)
+				map->maxvalue = map->arr[map->r_pos][map->c_pos];
+			if (map->arr[map->r_pos][map->c_pos] < map->minvalue)
+				map->minvalue = map->arr[map->r_pos][map->c_pos];
 			map->c_pos++;
 		}
 		free(split_str);
@@ -86,5 +94,5 @@ details read_map(char *filename)
 		map->r_pos++;
 	}
 	close(fd);
-	return (*map);
+	return (map);
 }

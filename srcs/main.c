@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/14 15:47:15 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/15 13:05:02 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	mmlx_put_pix(t_data *data, int x, int y, int colour)
 	*(unsigned int *)dst = colour;
 }
 
-void	afterte(t_data *mlx, int x, int y, int color)
+void	adfgearg(t_data *mlx, int x, int y, int color)
 {
 	int	*buffer;
 
@@ -51,7 +51,7 @@ void	initialisation(t_data *mlx)
 int main(int argc, char **argv)
 {
 	t_data	mlx;
-	details	display;
+	details	*display;
 
 	if (argc == 2)
 		display = read_map(argv[1]);
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	initialisation(&mlx);
-	draw_grid(&mlx, &display);
+	draw_grid(&mlx, display);
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
 	mlx_loop(mlx.mlx);
 	return (0);
