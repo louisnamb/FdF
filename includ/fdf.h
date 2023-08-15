@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/07/06 15:53:10 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/15 15:32:47 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ typedef struct	window_info {
 	void	*mlx;
 	void	*img;
 	void	*win;
-	char	*addr;
+	void	*addr;
 	int		bitsperpix;
 	int		linelen;
 	int		endian;
+	int		width;
+	int		height;
 }	t_data;
 
 typedef struct	map_info {
@@ -34,19 +36,44 @@ typedef struct	map_info {
 	int		r_pos;
 	int		c_pos;
 	int		**arr;
+	int		minvalue;
+	int		maxvalue;
 }	details;
 
-void		mmlx_put_pix(t_data *data, int x, int y, int colour);
+typedef	struct	points {
+	int x;
+	int y;
+}	points_info;
+
+typedef struct	vector {
+	int	x;
+	int	y;
+	int	z;
+} vec;
+
+typedef	struct	angle {
+	int	x;
+	int	y;
+	int z;
+}	angle;
+
+#define RADIANS(degrees) (degrees * M_PI) / 180.0
+
+void		initialisation(t_data *mlx);
 
 int			esc(int keycode, t_data *hook);
 
-void		draw_square(t_data *mlx, int x, int x_bound, int height);
-
-void		draw_point(t_data *mlx, int x, int y);
-
 int			mouse_move(int button, int x, int y, t_data *hook);
 
-details		read_map(char *filename);
+int			xbutton(t_data *hook);// int x, int y, t_data *hook);
+
+int			key_hook(int keycode, t_data *hook);
+
+int			mouse_hook(int keycode, int button, int x, int y, t_data *hook);
+
+int			controls(int keycode, t_data *hook);
+
+details		*read_map(char *filename);
 
 char		**ft_split(char const *s, char c);
 
@@ -56,12 +83,18 @@ char		*ft_strjoin(char const *s1, char const *s2);
 
 int			ft_atoi(const char *str);
 
-int			key_hook(int keycode, t_data *hook);
-
 int			ft_isdigit(int c);
 
-int			xbutton(t_data *hook);// int x, int y, t_data *hook);
+void		mmlx_put_pix(t_data *data, int x, int y, int colour);
 
-int			mouse_hook(int keycode, int button, int x, int y, t_data *hook);
+void		draw_square(t_data *mlx, int bX, int bY, int fX, int fY, int color);
 
-int			controls(int keycode, t_data *hook);
+void		draw_bresenham_line_l(t_data *mlx, int startX, int startY, int endX, int endY, int color);
+
+void		draw_bresenham_line_h(t_data *mlx, int startX, int startY, int endX, int endY, int color);
+
+void 		draw_line(void *mlx, void *win, int beginX, int beginY, int endX, int endY, int color);
+
+void		draw_vertical(t_data *mlx, int startX, int startY, int endX, int endY, int color);
+
+void		draw_grid(t_data *mlx, details *map);
