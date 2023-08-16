@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/15 16:57:10 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/16 17:18:31 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,30 @@ void		draw_vertical(t_data *mlx, int startX, int startY, int endX, int endY, int
 	return ;
 }
 
+int	absolute(int result)
+{
+	if (result < 0)
+		return (result * -1);
+	return (result);
+}
+
 void	swap_points(t_data *mlx, int startX, int startY, int endX, int endY, int color)
 {
 	if (startX == endX)
 		draw_vertical(mlx, startX, startY, endX, endY, color);
-	if (endX > startX)
+	if (absolute(endY - startY) < absolute(endX - startX))
 	{
-		if (endY > startY)
-			draw_bresenham_line_h(mlx, startX, startY, endX, endY, color);
+		if (startX > endX)
+			draw_bresenham_line_l(mlx, endX, endY, startX, startY,  color);
 		else
 			draw_bresenham_line_l(mlx, startX, startY, endX, endY, color);
 	}
 	else
 	{
-		if (endY > startY)
+		if (startY > endY)
 			draw_bresenham_line_h(mlx, endX, endY, startX, startY, color);
 		else
-			draw_bresenham_line_l(mlx, endX, endY, startX, startY, color);
+			draw_bresenham_line_h(mlx, startX, startY,  endX, endY, color);
 	}
 	return ;
 }
@@ -98,11 +105,11 @@ void		draw_bresenham_line_h(t_data *mlx, int startX, int startY, int endX, int e
 	if (deltaX < 0)
 	{
 		xi = -1;
-		deltaX = -deltaX;
+		deltaX = -1 * deltaX;
 	}
 	y = startY;
 	x = startX;
-	diff = 2 * deltaY - deltaX;
+	diff = (2 * deltaX) - deltaY;
 	while (y < endY)
 	{
 		mmlx_put_pix(mlx, x, y, color);
@@ -112,78 +119,51 @@ void		draw_bresenham_line_h(t_data *mlx, int startX, int startY, int endX, int e
 			diff = diff + (2 * (deltaX - deltaY));
 		}
 		else
-			diff = diff + 2 * deltaY;
+			diff = diff + 2 * deltaX;
 		y++;
 	}
 	return ;
 }
 
-vec	rz_xyz(vec matrix, angle theta)
+vec	rz_xyz(vec matrix, float theta)
 {
 	vec	vector;
 
-	vector.x = (matrix.x * cos(RADIANS(theta.x)) + -sin(RADIANS(theta.x)) * matrix.y + 0 * z);
-	vector.y = (sin(RADIANS(theta.y)) * matrix.x + cos(RADIANS(theta.y)) * matrix.y + matrix.z * 0);
-	vector.z = (x * 0 + matrix.y * 0 + matrix.z * 1);
+	vector.x = (matrix.x * cos(RADIANS(theta)) + -sin(RADIANS(theta)) * matrix.y + 0 * matrix.z);
+	vector.y = (sin(RADIANS(theta)) * matrix.x + cos(RADIANS(theta)) * matrix.y + matrix.z * 0);
+	vector.z = (matrix.x * 0 + matrix.y * 0 + matrix.z * 1);
 	return (vector);
 }
 
-input_point 
-rx_x
-rx_y
-rx_z
-output_point
-
-output_point
-ry_x
-ry_y
-ry_z
-output_point
-
-output_point
-rz_x
-rz_y
-rz_z
-output_point
-
-vec	ry_xyz(vec matrix, angle theta)
+vec	rx_xyz(vec matrix, float theta)
 {
 	vec	vector;
 
 	vector.x = (1 * matrix.x + 0 * matrix.y + matrix.z * 0);
-	vector.y = (0 * matrix.x + cos(RADIANS(theta.y) * matrix.y + -sin(RADIANS(theta.y) * z)));
-	vector.z = (0 * matrix.x + matrix.y * sin(RADIANS(theta.z)) + matrix.z * cos(RADIANS(theta.z)));
+	vector.y = (0 * matrix.x + cos(RADIANS(theta)) * matrix.y + -sin(RADIANS(theta)) * matrix.z);
+	vector.z = (0 * matrix.x + matrix.y * sin(RADIANS(theta)) + matrix.z * cos(RADIANS(theta)));
 	return (vector);
 }
 
-vec r_xyz(vec matrix, angle theta)
-{
-	matrix = rx_xyz(matrix, theata.x);
-	matrix = ry_xyz(matrix, theta.y);
-	matrix = rz_xyz(matrix, theta.z)
-	return (matrix);
-}
-
-vec3 p1;
-vec3 p2;
-
-p1 = rx_xyz(insert);
-p1 = ry_xyz(p1);
-p1 = rz_xyz(p1);
-
-p2 = rx_xyz(insert);
-p2 = ry_xyz(insert);
-p2 = rz_xyz(insert);
-plot (p1.x, p1.y , p2.x, p2.y);
-
-vec	ry_xyz(vec matrix, int angle)
+vec	ry_xyz(vec matrix, float theta)
 {
 	vec	vector;
 
-	vector.x = (cos(RADIANS(theta.x)) * matrix.x + 0 * matrix.y + sin(RADIANS(theta.x)) * z);
-	vector.y = (cos(RADIANS(theta.y)) * 0 + matrix.y * 1 + matrix.z * 0);
-	vector.z = (-sin(RADIANS(theta.z)) * matrix.x + 0 * matrix.y + cos(RADIANS(theta.z)) * z);
+	vector.x = (cos(RADIANS(theta)) * matrix.x + 0 * matrix.y + sin(RADIANS(theta)) * matrix.z);
+	vector.y = (matrix.x * 0 + matrix.y * 1 + matrix.z * 0);
+	vector.z = (-sin(RADIANS(theta)) * matrix.x + 0 * matrix.y + cos(RADIANS(theta)) * matrix.z);
 	return (vector);
+}
+
+vec	r_xyz(vec new, angles theta)
+{
+	vec	matrix;
+
+	matrix = new;
+	matrix = rz_xyz(matrix, theta.z);
+	matrix = ry_xyz(matrix, theta.y);
+	matrix = rx_xyz(matrix, theta.x);
+	return (matrix);
 }
 
 int	shader(double distance, int color)
@@ -193,47 +173,75 @@ int	shader(double distance, int color)
 	return ((distance / 100.0) * (double)color);
 }
 
+void draw_circle(t_data *mlx)
+{
+	int offsetX = 300;
+	int offsetY = 300;
+
+	float angle = 0;
+	vec one = {100, 0, 0};
+
+	draw_bresenham_line_h(mlx, 0, 30, 0, 80, 0xFF00FF);
+	draw_bresenham_line_h(mlx, 0 + offsetX, 0 + offsetY, -2 + offsetX, 13 + offsetY, 0xFF00FF);
+	swap_points(mlx, 0 + offsetX, 0 + offsetY, -2 + offsetX, 13 + offsetY, 0xFF00FF);
+	while (angle < 360)
+	{
+		vec first = rz_xyz(one, angle);
+		vec second = rz_xyz(one, angle + 10);
+		swap_points(mlx, first.x + offsetX, first.y + offsetY, second.x + offsetX, second.y + offsetY, 0x00FF00);
+		mmlx_put_pix(mlx, first.x + offsetX, first.y + offsetY, 0xFF0000);
+		mmlx_put_pix(mlx, first.x + 1 + offsetX, first.y + offsetY, 0xFF0000);
+		mmlx_put_pix(mlx, first.x  + offsetX, 1 + first.y + offsetY, 0xFF0000);
+		mmlx_put_pix(mlx, first.x + offsetX + 1, 1 + first.y + offsetY, 0xFF0000);
+
+	//	mmlx_put_pix(mlx, second.x + offsetX - 10, first.y + offsetY - 10, 0x00FF00);
+//		mmlx_put_pix(mlx, second.x + 1 + offsetX - 10, first.y + offsetY - 10, 0x00FF00);
+	//	mmlx_put_pix(mlx, second.x + offsetX - 10, + 1 + first.y + offsetY - 10, 0x00FF00);
+	//	mmlx_put_pix(mlx, second.x + 1 +offsetX - 10, + 1 +first.y + offsetY - 10, 0x00FF00);
+		angle += 10;
+	}
+}
+
 void	draw_grid(t_data *mlx, details *map)
 {
 	int	c;
 	int	r;
 	int	x_c;
 	int	y_c;
-	int add;
-
-	int xR = 45;
+	vec	before;
+	vec	after;
+	vec	past;
+	angles	degrees;
 	x_c = 450;
-	y_c = 1;
+	degrees = (angles){33, 0, 33};
+	y_c = 0;
 	r = 0;
-	add = 25;
+	
+//	before = r_xyz((vec){x_c, y_c, map->arr[r][0]}, degrees);
+//	future = before;
 	while (r + 1 < map->rowcount)
 	{
 		c = 0;
 		while (c + 1 < map->columncount)
 		{
-			vec	before;
-			vec	after;
-
-			before = rx_xyz({x_c, y_c, map->arr[r][c]}, 45);
-			before = ry_xyz(before, 60);
-			before = rz_xyz(before, 75);
-
-			after = rx_xyz({x_c, y_c - add, map->arr[r][c]}, 34);
-			after = ry_xyz(after, 53);
-			after = rz_xyz(after, 60);
+			before = r_xyz((vec){x_c, y_c, map->arr[r][c]}, degrees);
+			past = r_xyz((vec){x_c + 50, y_c, map->arr[r][c + 1]}, degrees);
 			if (c < map->columncount)
-				swap_points(mlx, before.x, before.y, after.x, after.y, 
+				swap_points(mlx, before.x, before.y, past.x, past.y, 
 				shader(map->arr[r][c + 1], 0xFFFFFF));//red horizontal 
 			if (r)
-				before = {x_c, y_c, map->arr[r][c]};
-				after = {x_c, y_c, map->arr[r - 1][c]};
+			{
+				after = r_xyz((vec){x_c, y_c - 50, map->arr[r - 1][c]}, degrees);
 				swap_points(mlx, before.x, before.y, after.x, after.y,
 				shader(map->arr[r - 1][c], 0xFFFFFF));//blue vertical good
+			}
 			c++;
-			x_c += add;
+		//	before = past;
+			//c = (c + 1) % map->columncount;
+			x_c += 50;
 		}
 		x_c = 450;
-		y_c += add;
+		y_c += 50;
 		r++;
 	}
 	return ;
