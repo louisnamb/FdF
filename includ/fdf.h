@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/15 15:32:47 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/17 15:22:07 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,16 @@ typedef	struct	points {
 }	points_info;
 
 typedef struct	vector {
-	int	x;
-	int	y;
-	int	z;
+	float	x;
+	float	y;
+	float	z;
 } vec;
 
-typedef	struct	angle {
-	int	x;
-	int	y;
-	int z;
-}	angle;
+typedef	struct	degrees {
+	float	x;
+	float	y;
+	float	z;
+}	angles;
 
 #define RADIANS(degrees) (degrees * M_PI) / 180.0
 
@@ -89,12 +89,12 @@ void		mmlx_put_pix(t_data *data, int x, int y, int colour);
 
 void		draw_square(t_data *mlx, int bX, int bY, int fX, int fY, int color);
 
-void		draw_bresenham_line_l(t_data *mlx, int startX, int startY, int endX, int endY, int color);
+void		draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, int color);
 
-void		draw_bresenham_line_h(t_data *mlx, int startX, int startY, int endX, int endY, int color);
+void		draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, int color);
 
 void 		draw_line(void *mlx, void *win, int beginX, int beginY, int endX, int endY, int color);
 
-void		draw_vertical(t_data *mlx, int startX, int startY, int endX, int endY, int color);
+void		draw_vertical(t_data *mlx, vec *start, vec *end, int color);
 
 void		draw_grid(t_data *mlx, details *map);
