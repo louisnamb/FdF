@@ -6,21 +6,21 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/16 17:18:31 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/17 15:35:31 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void		draw_vertical(t_data *mlx, int startX, int startY, int endX, int endY, int color)
+void		draw_vertical(t_data *mlx, vec *start, vec *end, int color)
 {
 	int	y;
 	int	x;
 
-	(void)endX;
-	x = startX;
-	y = startY;
-	while (y >= endY)
+	(void)end->x;
+	x = (int)start->x;
+	y = (int)start->y;
+	while (y >= end->y)
 	{
 		mmlx_put_pix(mlx, x, y, color);
 		y--;
@@ -35,28 +35,39 @@ int	absolute(int result)
 	return (result);
 }
 
-void	swap_points(t_data *mlx, int startX, int startY, int endX, int endY, int color)
+void	swap_points(t_data *mlx, vec *start, vec *end, int color)
 {
-	if (startX == endX)
-		draw_vertical(mlx, startX, startY, endX, endY, color);
-	if (absolute(endY - startY) < absolute(endX - startX))
+	if (start->x == end->x)
+		draw_vertical(mlx, start, end, color);
+	if (absolute(end->y - start->y) < absolute(end->x - start->x))
 	{
-		if (startX > endX)
-			draw_bresenham_line_l(mlx, endX, endY, startX, startY,  color);
+		if (start->x > end->x)
+			draw_bresenham_line_l(mlx, end, start, color);
 		else
-			draw_bresenham_line_l(mlx, startX, startY, endX, endY, color);
+			draw_bresenham_line_l(mlx, start, end, color);
 	}
 	else
 	{
-		if (startY > endY)
-			draw_bresenham_line_h(mlx, endX, endY, startX, startY, color);
+		if (start->y > end->y)
+			draw_bresenham_line_h(mlx, end, start, color);
 		else
-			draw_bresenham_line_h(mlx, startX, startY,  endX, endY, color);
+			draw_bresenham_line_h(mlx, start, end, color);
 	}
 	return ;
 }
 
-void		draw_bresenham_line_l(t_data *mlx, int startX, int startY, int endX, int endY, int color)
+int	shader(double distance, double prev, int curr_x, int color)
+{
+	(void)curr_x;
+	if (distance == 0.0 && prev == 0.0)
+		return (0xFFFFFF);
+	else if (distance == 0.0 && prev != 0.0)
+		return ((prev / 100.0) * (double)color);
+//	return ((x_c - 540 / 540) * (double)color); put this function in the draw_bresenham_line
+		return ((distance / 100.0) * (double)color);
+}
+
+void		draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, int color)
 {
 	int	x;
 	int	y;
@@ -64,8 +75,9 @@ void		draw_bresenham_line_l(t_data *mlx, int startX, int startY, int endX, int e
 	int deltaY;
 	int	diff;
 	int yi = 1;
-	deltaX = endX - startX;
-	deltaY = endY - startY;
+
+	deltaX = end->x - start->x;
+	deltaY = end->y - start->y;
 	yi = 1;
 	if (deltaY < 0)
 	{
@@ -73,9 +85,9 @@ void		draw_bresenham_line_l(t_data *mlx, int startX, int startY, int endX, int e
 		deltaY = -deltaY;
 	}
 	diff = (2 * deltaY) - deltaX;
-	y = startY;
-	x = startX;
-	while (x < endX)
+	y = (int)start->y;
+	x = (int)start->x;
+	while (x < end->x)
 	{
 		mmlx_put_pix(mlx, x, y, color);
 		if (diff > 0)
@@ -90,7 +102,7 @@ void		draw_bresenham_line_l(t_data *mlx, int startX, int startY, int endX, int e
 	return ;
 }
 
-void		draw_bresenham_line_h(t_data *mlx, int startX, int startY, int endX, int endY, int color)
+void		draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, int color)
 {
 	int	x;
 	int	y;
@@ -99,23 +111,23 @@ void		draw_bresenham_line_h(t_data *mlx, int startX, int startY, int endX, int e
 	int	diff;
 	int xi;
 
-	deltaX = endX - startX;
-	deltaY = endY - startY;
+	deltaX = (int)(end->x - start->x);
+	deltaY = (int)(end->y - start->y);
 	xi = 1;
 	if (deltaX < 0)
 	{
 		xi = -1;
 		deltaX = -1 * deltaX;
 	}
-	y = startY;
-	x = startX;
+	y = (int)start->y;
+	x = (int)start->x;
 	diff = (2 * deltaX) - deltaY;
-	while (y < endY)
+	while (y < end->y)
 	{
 		mmlx_put_pix(mlx, x, y, color);
 		if (diff > 0)
 		{
-			x = x + xi;//= direction;
+			x = x + xi;
 			diff = diff + (2 * (deltaX - deltaY));
 		}
 		else
@@ -160,47 +172,12 @@ vec	r_xyz(vec new, angles theta)
 	vec	matrix;
 
 	matrix = new;
+	matrix = rx_xyz(matrix, theta.x);
 	matrix = rz_xyz(matrix, theta.z);
 	matrix = ry_xyz(matrix, theta.y);
-	matrix = rx_xyz(matrix, theta.x);
 	return (matrix);
 }
 
-int	shader(double distance, int color)
-{
-	if (distance == 0.0)
-		return (0xFFFFFF);
-	return ((distance / 100.0) * (double)color);
-}
-
-void draw_circle(t_data *mlx)
-{
-	int offsetX = 300;
-	int offsetY = 300;
-
-	float angle = 0;
-	vec one = {100, 0, 0};
-
-	draw_bresenham_line_h(mlx, 0, 30, 0, 80, 0xFF00FF);
-	draw_bresenham_line_h(mlx, 0 + offsetX, 0 + offsetY, -2 + offsetX, 13 + offsetY, 0xFF00FF);
-	swap_points(mlx, 0 + offsetX, 0 + offsetY, -2 + offsetX, 13 + offsetY, 0xFF00FF);
-	while (angle < 360)
-	{
-		vec first = rz_xyz(one, angle);
-		vec second = rz_xyz(one, angle + 10);
-		swap_points(mlx, first.x + offsetX, first.y + offsetY, second.x + offsetX, second.y + offsetY, 0x00FF00);
-		mmlx_put_pix(mlx, first.x + offsetX, first.y + offsetY, 0xFF0000);
-		mmlx_put_pix(mlx, first.x + 1 + offsetX, first.y + offsetY, 0xFF0000);
-		mmlx_put_pix(mlx, first.x  + offsetX, 1 + first.y + offsetY, 0xFF0000);
-		mmlx_put_pix(mlx, first.x + offsetX + 1, 1 + first.y + offsetY, 0xFF0000);
-
-	//	mmlx_put_pix(mlx, second.x + offsetX - 10, first.y + offsetY - 10, 0x00FF00);
-//		mmlx_put_pix(mlx, second.x + 1 + offsetX - 10, first.y + offsetY - 10, 0x00FF00);
-	//	mmlx_put_pix(mlx, second.x + offsetX - 10, + 1 + first.y + offsetY - 10, 0x00FF00);
-	//	mmlx_put_pix(mlx, second.x + 1 +offsetX - 10, + 1 +first.y + offsetY - 10, 0x00FF00);
-		angle += 10;
-	}
-}
 
 void	draw_grid(t_data *mlx, details *map)
 {
@@ -212,35 +189,34 @@ void	draw_grid(t_data *mlx, details *map)
 	vec	after;
 	vec	past;
 	angles	degrees;
-	x_c = 450;
-	degrees = (angles){33, 0, 33};
+	x_c = 540;
+	degrees = (angles){0, 20, 10};
 	y_c = 0;
 	r = 0;
-	
-//	before = r_xyz((vec){x_c, y_c, map->arr[r][0]}, degrees);
-//	future = before;
-	while (r + 1 < map->rowcount)
+	while (r + 1 <= map->rowcount)
 	{
 		c = 0;
 		while (c + 1 < map->columncount)
 		{
 			before = r_xyz((vec){x_c, y_c, map->arr[r][c]}, degrees);
 			past = r_xyz((vec){x_c + 50, y_c, map->arr[r][c + 1]}, degrees);
-			if (c < map->columncount)
-				swap_points(mlx, before.x, before.y, past.x, past.y, 
-				shader(map->arr[r][c + 1], 0xFFFFFF));//red horizontal 
+			if (c <= map->columncount)
+				swap_points(mlx, &before, &past, shader(map->arr[r][c], map->arr[r][c + 1], x_c, 0xFF0000));//red horizontal 
 			if (r)
 			{
 				after = r_xyz((vec){x_c, y_c - 50, map->arr[r - 1][c]}, degrees);
-				swap_points(mlx, before.x, before.y, after.x, after.y,
-				shader(map->arr[r - 1][c], 0xFFFFFF));//blue vertical good
+				swap_points(mlx, &before, &after, shader(map->arr[r][c], map->arr[r - 1][c], x_c, 0xFF0000));//blue vertical good
 			}
 			c++;
-		//	before = past;
-			//c = (c + 1) % map->columncount;
 			x_c += 50;
 		}
-		x_c = 450;
+		if (c + 1 == map->columncount && r && r < map->rowcount)
+		{
+			before = r_xyz((vec){x_c, y_c, map->arr[r][map->columncount - 1]}, degrees);
+			after = r_xyz((vec){x_c, y_c - 50, map->arr[r - 1][map->columncount - 1]}, degrees);
+			swap_points(mlx, &before, &after, shader(map->arr[r][map->columncount - 1], map->arr[r - 1][map->columncount - 1], x_c, 0xFF0000));//red horizontal 
+		}
+		x_c = 540;
 		y_c += 50;
 		r++;
 	}
