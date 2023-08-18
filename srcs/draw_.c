@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/17 15:35:31 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/18 12:45:27 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ int	absolute(int result)
 	return (result);
 }
 
-void	swap_points(t_data *mlx, vec *start, vec *end, int color)
+void	swap_points(t_data *mlx, vec *start, vec *end, gradient *color)
 {
 	if (start->x == end->x)
-		draw_vertical(mlx, start, end, color);
+		draw_vertical(mlx, start, end, color->colour);
 	if (absolute(end->y - start->y) < absolute(end->x - start->x))
 	{
 		if (start->x > end->x)
@@ -56,18 +56,37 @@ void	swap_points(t_data *mlx, vec *start, vec *end, int color)
 	return ;
 }
 
-int	shader(double distance, double prev, int curr_x, int color)
+// int	shader(gradient color, int start, int end)
+// {
+// 	(void)curr_x;
+// 	if (color->curr_z == 0.0 && color->prev_z == 0.0)
+// 		return (0xFFFFFF);
+// 	else if (color->curr_z == 0.0 && color->prev_z != 0.0)
+// 		return ((color->prev_z / 100.0) * (double)color);
+// //	return ((x_c - 540 / 540) * (double)color); put this function in the draw_bresenham_line
+// 		return ((color->curr_z / 100.0) * (double)color);
+// }
+
+int	shader(gradient *color, int curr, int end)
 {
-	(void)curr_x;
-	if (distance == 0.0 && prev == 0.0)
+	double	greater;
+	int	answer;
+
+	greater = 0.0;
+	if (color->curr_z > color->prev_z)
+		greater = color->curr_z;
+	else
+		greater = color->prev_z;
+	if (!greater)
 		return (0xFFFFFF);
-	else if (distance == 0.0 && prev != 0.0)
-		return ((prev / 100.0) * (double)color);
-//	return ((x_c - 540 / 540) * (double)color); put this function in the draw_bresenham_line
-		return ((distance / 100.0) * (double)color);
+	else if (color->curr_z == color->prev_z)
+		return ((greater / 100.0) * ((double)color->colour));
+//	return ((double)(((curr) % end) / 100) * (greater / 100.0) * (double)color->colour);
+	answer = ((((double)curr) / ((double)end - 1)) * (greater / 100.0) * (double)color->colour);
+	return (answer);
 }
 
-void		draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, int color)
+void		draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, gradient *color)
 {
 	int	x;
 	int	y;
@@ -89,7 +108,7 @@ void		draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, int color)
 	x = (int)start->x;
 	while (x < end->x)
 	{
-		mmlx_put_pix(mlx, x, y, color);
+		mmlx_put_pix(mlx, x, y, shader(color, x, end->x));
 		if (diff > 0)
 		{
 			y = y + yi;
@@ -102,7 +121,7 @@ void		draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, int color)
 	return ;
 }
 
-void		draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, int color)
+void		draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, gradient *color)
 {
 	int	x;
 	int	y;
@@ -124,7 +143,7 @@ void		draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, int color)
 	diff = (2 * deltaX) - deltaY;
 	while (y < end->y)
 	{
-		mmlx_put_pix(mlx, x, y, color);
+		mmlx_put_pix(mlx, x, y, shader(color, y, end->y));
 		if (diff > 0)
 		{
 			x = x + xi;
@@ -201,11 +220,11 @@ void	draw_grid(t_data *mlx, details *map)
 			before = r_xyz((vec){x_c, y_c, map->arr[r][c]}, degrees);
 			past = r_xyz((vec){x_c + 50, y_c, map->arr[r][c + 1]}, degrees);
 			if (c <= map->columncount)
-				swap_points(mlx, &before, &past, shader(map->arr[r][c], map->arr[r][c + 1], x_c, 0xFF0000));//red horizontal 
+				swap_points(mlx, &before, &past, &(gradient){map->arr[r][c], map->arr[r][c + 1], x_c, 0xFF0000});//red horizontal 
 			if (r)
 			{
 				after = r_xyz((vec){x_c, y_c - 50, map->arr[r - 1][c]}, degrees);
-				swap_points(mlx, &before, &after, shader(map->arr[r][c], map->arr[r - 1][c], x_c, 0xFF0000));//blue vertical good
+				swap_points(mlx, &before, &after, &(gradient){map->arr[r][c], map->arr[r - 1][c], x_c, 0xFF0000});//blue vertical good
 			}
 			c++;
 			x_c += 50;
@@ -214,7 +233,7 @@ void	draw_grid(t_data *mlx, details *map)
 		{
 			before = r_xyz((vec){x_c, y_c, map->arr[r][map->columncount - 1]}, degrees);
 			after = r_xyz((vec){x_c, y_c - 50, map->arr[r - 1][map->columncount - 1]}, degrees);
-			swap_points(mlx, &before, &after, shader(map->arr[r][map->columncount - 1], map->arr[r - 1][map->columncount - 1], x_c, 0xFF0000));//red horizontal 
+			swap_points(mlx, &before, &after, &(gradient){map->arr[r][map->columncount - 1], map->arr[r - 1][map->columncount - 1], x_c, 0xFF0000});//red horizontal 
 		}
 		x_c = 540;
 		y_c += 50;
