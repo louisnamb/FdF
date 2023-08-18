@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/17 15:22:07 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/18 11:35:48 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,14 @@ typedef	struct	points {
 	int y;
 }	points_info;
 
-typedef struct	vector {
+typedef	struct color {
+	double curr_z;
+	double prev_z;
+	int x;
+	int colour;
+}	gradient;
+
+typedef	struct vector {
 	float	x;
 	float	y;
 	float	z;
@@ -87,11 +94,9 @@ int			ft_isdigit(int c);
 
 void		mmlx_put_pix(t_data *data, int x, int y, int colour);
 
-void		draw_square(t_data *mlx, int bX, int bY, int fX, int fY, int color);
+void		draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, gradient *color);
 
-void		draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, int color);
-
-void		draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, int color);
+void		draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, gradient *color);
 
 void 		draw_line(void *mlx, void *win, int beginX, int beginY, int endX, int endY, int color);
 
