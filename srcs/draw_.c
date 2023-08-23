@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/18 12:45:27 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/23 17:07:26 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,11 @@ void	swap_points(t_data *mlx, vec *start, vec *end, gradient *color)
 
 int	shader(gradient *color, int curr, int end)
 {
-	double	greater;
-	int	answer;
+	double		greater;
+	int			answer;
+	static int	last;
 
+	last = end;
 	greater = 0.0;
 	if (color->curr_z > color->prev_z)
 		greater = color->curr_z;
@@ -81,10 +83,68 @@ int	shader(gradient *color, int curr, int end)
 		return (0xFFFFFF);
 	else if (color->curr_z == color->prev_z)
 		return ((greater / 100.0) * ((double)color->colour));
-//	return ((double)(((curr) % end) / 100) * (greater / 100.0) * (double)color->colour);
-	answer = ((((double)curr) / ((double)end - 1)) * (greater / 100.0) * (double)color->colour);
-	return (answer);
+	else if (((last - curr) % last) == 50)// || ((last - curr) % last) == 0)
+	{
+	//	answer = (((end - curr) / greater) * (double)color->colour);
+		answer = (((double)curr / (double)(last - 1)) * (greater / 100.0));// * (double)color->colour);
+		last = end;
+		return (answer);
+	}
+	else
+		return ((double)((last - ((last - curr) % last)) / (double)(end - 1)) * (greater / 100.0) * (double)color->colour);	
 }
+
+// int interpolate(rgb begin, rgb max)
+// {
+//     // Calculate the relative position of 'curr' between the start and end positions.
+//     double t = (double)curr / (double)(end - 1);
+    
+//     // Ensure 't' is within the [0, 1] range.
+//     t = fmax(0.0, fmin(1.0, t));
+    
+//     // Linearly interpolate the color components (R, G, B) based on 't'.
+//     int red = (int)((1.0 - t) * begin->r + t * max->r);
+//     int green = (int)((1.0 - t) * begin->g + t * max->g);
+//     int blue = (int)((1.0 - t) * begin->b + t * max->b);
+    
+//     // Combine the interpolated color components into a single RGB color.
+//     int interpolatedColor = (red << 16) | (green << 8) | blue;
+    
+//     return interpolatedColor;
+// }
+
+// int	fdgfg(gradient *color, int curr, int end)
+// {
+// 	double			greater;
+// 	rgb				max;
+// 	rgb				begin;
+// 	int				max_colour;
+
+// 	if (color->curr_z > color->prev_z)
+// 		greater = color->curr_z;
+// 	else
+// 		greater = color->prev_z;
+// 	max_colour = 0x800080;
+// 	begin.r = (color->colour >> 16) & 0xFF;
+// 	begin.g = (color->colour >> 8) & 0xFF;
+// 	begin.b = (color->colour) & 0xFF;
+// //	begin.a = (color->colour) & 0xFF;
+// 	max.r = (max_colour >> 16) & 0xFF;
+// 	max.g = (max_colour >> 8) & 0xFF; 
+// 	max.b = (max_colour) & 0xFF;
+// //	max.a = (max_colour) & 0xFF;
+// 	if (!greater)
+// 		return (0xFFFFFF);
+// 	else if (color->curr_z == color->prev_z)
+// 		return ((greater / 100.0) * (double)color->colour);
+// 	else
+// 		return (((end - start) / (greater)) * (double)color->colour);
+// 	//	return (interpolate(begin, max));
+// 		// return ((int)(begin.r + (max.r - begin.r) * (float)(curr / end)) |
+// 		// (int)(begin.g + (max.g - begin.g) * (float)(curr / end)) |
+// 		// (int)(begin.b + (max.b - begin.b) * (float)(curr / end))) | (max_colour));
+// 	//	(begin.a + (max.a - begin.a) * (curr / end)) * (max_colour));
+// }
 
 void		draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, gradient *color)
 {
