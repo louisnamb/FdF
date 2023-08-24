@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:04 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/14 10:33:13 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/24 15:31:33 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	mouse_hook(int keycode, int button, int x, int y, t_data *hook)
 	(void)button;
 	(void)keycode;
 	mlx_destroy_window(hook->mlx, hook->win);
+	free(hook);
 	exit(0);
 	return (0);
 }

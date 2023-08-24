@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/15 13:05:02 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/24 14:13:55 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	initialisation(t_data *mlx)
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bitsperpix, &mlx->linelen, &mlx->endian);
 
 	/* Hooks and Controls */ 
-	mlx_mouse_hook(mlx->win, mouse_hook, mlx);
-	mlx_hook(mlx->win, 17, 1L<<5, xbutton, mlx);
+	//mlx_mouse_hook(mlx->win, mouse_hook, mlx);
+	mlx_hook(mlx->win, 17, 0, xbutton, mlx);
 	mlx_hook(mlx->win, 2, 1L<<0, esc, mlx);
 	mlx_key_hook(mlx->win, controls, mlx);
 	return ;
