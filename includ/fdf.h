@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/18 11:35:48 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/28 12:50:05 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,30 @@ typedef struct	window_info {
 	int		height;
 }	t_data;
 
+typedef	struct bresenham {
+	int deltaX;
+	int deltaY;
+	int	diff;
+	int x;
+	int y;
+	int	variable_i;
+} bresenham;
+
 typedef struct	map_info {
 	int		rowcount;
 	int		columncount;
 	int		r_pos;
 	int		c_pos;
 	int		**arr;
-	int		minvalue;
-	int		maxvalue;
 }	details;
 
 typedef	struct	points {
-	int x;
-	int y;
+	int x_c;
+	int y_c;
+	int	line_add;
+	int	r;
+	int	c;
+	int add;
 }	points_info;
 
 typedef	struct color {
@@ -51,6 +62,13 @@ typedef	struct color {
 	int x;
 	int colour;
 }	gradient;
+
+typedef	struct rgb {
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+	unsigned char	a;
+} rgb;
 
 typedef	struct vector {
 	float	x;
