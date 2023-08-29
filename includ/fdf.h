@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/28 12:50:05 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/08/29 17:14:54 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,9 @@
 # include <time.h>
 # include <fcntl.h>
 
-typedef struct	window_info {
-	void	*mlx;
-	void	*img;
-	void	*win;
-	void	*addr;
-	int		bitsperpix;
-	int		linelen;
-	int		endian;
-	int		width;
-	int		height;
-}	t_data;
-
-typedef	struct bresenham {
-	int deltaX;
-	int deltaY;
-	int	diff;
-	int x;
-	int y;
-	int	variable_i;
-} bresenham;
-
 typedef struct	map_info {
-	int		rowcount;
-	int		columncount;
+	int		r_cnt;
+	int		c_cnt;
 	int		r_pos;
 	int		c_pos;
 	int		**arr;
@@ -54,7 +33,30 @@ typedef	struct	points {
 	int	r;
 	int	c;
 	int add;
-}	points_info;
+}	pts_info;
+
+typedef struct	window_info {
+	void			*mlx;
+	void			*img;
+	void			*win;
+	void			*addr;
+	int				bitsperpix;
+	int				linelen;
+	int				endian;
+	int				width;
+	int				height;
+	struct map_info	*map;
+	struct points	*pts;
+}	t_data;
+
+typedef	struct bresenham {
+	int deltaX;
+	int deltaY;
+	int	diff;
+	int x;
+	int y;
+	int	variable_i;
+} bresenham;
 
 typedef	struct color {
 	double curr_z;
@@ -82,11 +84,10 @@ typedef	struct	degrees {
 	float	z;
 }	angles;
 
-#define RADIANS(degrees) (degrees * M_PI) / 180.0
 
-void		initialisation(t_data *mlx);
+void		initialisation(t_data *mlx, char *filepath);
 
-int			esc(int keycode, t_data *hook);
+int			keys_pressed(int keycode, t_data *hook);
 
 int			mouse_move(int button, int x, int y, t_data *hook);
 
@@ -120,4 +121,4 @@ void 		draw_line(void *mlx, void *win, int beginX, int beginY, int endX, int end
 
 void		draw_vertical(t_data *mlx, vec *start, vec *end, int color);
 
-void		draw_grid(t_data *mlx, details *map);
+void		draw_grid(t_data *mlx);
