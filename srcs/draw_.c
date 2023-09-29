@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/29 17:14:49 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/09/29 17:01:12 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@ void		draw_vertical(t_data *mlx, vec *start, vec *end, int color)
 	int	y;
 	int	x;
 
-	(void)end->x;
 	x = (int)start->x;
 	y = (int)start->y;
 	while (y >= end->y)
 	{
-		mmlx_put_pix(mlx, x, y, color);
+		add_color(mlx, x, y, color);
 		y--;
 	}
 	return ;
@@ -35,23 +34,23 @@ int	absolute(int result)
 	return (result);
 }
 
-void	swap_points(t_data *mlx, vec *start, vec *end, gradient *color)
+void	swap_points(t_data *mlx, vec *start, vec *end, gradient *color, int vert)
 {
 	if (start->x == end->x)
 		draw_vertical(mlx, start, end, color->colour);
 	if (absolute(end->y - start->y) < absolute(end->x - start->x))
 	{
 		if (start->x > end->x)
-			draw_bresenham_line_l(mlx, end, start, color);
+			draw_bresenham_line_l(mlx, end, start, color, vert);
 		else
-			draw_bresenham_line_l(mlx, start, end, color);
+			draw_bresenham_line_l(mlx, start, end, color, vert);
 	}
 	else
 	{
 		if (start->y > end->y)
-			draw_bresenham_line_h(mlx, end, start, color);
+			draw_bresenham_line_h(mlx, end, start, color, vert);
 		else
-			draw_bresenham_line_h(mlx, start, end, color);
+			draw_bresenham_line_h(mlx, start, end, color, vert);
 	}
 	return ;
 }
@@ -87,26 +86,34 @@ int	add_colour(int start, int end, double percentage)
 	return ((red << 16) | (green << 8) | blue);
 }
 
-int	shader(gradient *color, int start, int end, int curr)
+int	shader(gradient *color, int start, int end, int curr, int vert)
 {
 	double	greater;
 	int		max;
+	int		low;
+	int		tmp;
 
-	max = 0x1000FF;
+	max = 0xFF0000;
+	low = 0x9900FF;
 	greater = 0.0;
-	if (color->curr_z > color->prev_z)
+	if (color->curr_z > color->next_z && vert)
+	{
 		greater = color->curr_z;
+		tmp = max;
+		max = low;
+		low = tmp;
+	}
 	else
-		greater = color->prev_z;
+		greater = color->next_z;
 	if (greater == 0.0)
-		return (0xF00F00);
-	else if (color->curr_z == color->prev_z)
+		return (low);
+	else if (color->curr_z == color->next_z)
 		return (max);
 	else
-		return (add_colour(color->colour, max, find_percent(start, end, curr)));
+		return (add_colour(low, max, find_percent(start, end, curr)));
 }
 
-void	draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, gradient *color)
+void	draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, gradient *color, int vert)
 {
 	bresenham low;
 
@@ -123,7 +130,7 @@ void	draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, gradient *color)
 	low.x = (int)start->x - 1;
 	while (++low.x < end->x)
 	{
-		mmlx_put_pix(mlx, low.x, low.y, shader(color, start->x, end->x, low.x));
+		add_color(mlx, low.x, low.y, shader(color, start->x, end->x, low.x, vert));
 		if (low.diff > 0)
 		{
 			low.y = low.y + low.variable_i;
@@ -135,7 +142,7 @@ void	draw_bresenham_line_l(t_data *mlx, vec *start, vec *end, gradient *color)
 	return ;
 }
 
-void	draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, gradient *color)
+void	draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, gradient *color, int vert)
 {
 	bresenham high;
 
@@ -152,7 +159,7 @@ void	draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, gradient *color)
 	high.diff = (2 * high.deltaX) - high.deltaY;
 	while (++high.y < end->y)
 	{
-		mmlx_put_pix(mlx, high.x, high.y, shader(color, start->y, end->y, high.y));
+		add_color(mlx, high.x, high.y, shader(color, start->y, end->y, high.y, vert));
 		if (high.diff > 0)
 		{
 			high.x = high.x + high.variable_i;
@@ -164,39 +171,51 @@ void	draw_bresenham_line_h(t_data *mlx, vec *start, vec *end, gradient *color)
 	return ;
 }
 
-double	radians(float degrees)
+float	radians(float degrees)
 {
 	return ((degrees * M_PI) / 180.0);
 }
 
-vec	rz_xyz(vec matrix, float theta)
+vec	rz_xyz(vec mat, float theta)
 {
-	vec	vector;
+	float	cosTheta;
+	float	nsinTheta;
+	vec		vec;
 
-	vector.x = ((matrix.x * cos(radians(theta))) + (-sin(radians(theta)) * matrix.y) + (0 * matrix.z));
-	vector.y = ((sin(radians(theta)) * matrix.x) + (cos(radians(theta)) * matrix.y) + (matrix.z * 0));
-	vector.z = ((matrix.x * 0) + (matrix.y * 0) + (matrix.z * 1));
-	return (vector);
+	cosTheta = cos(radians(theta));
+	nsinTheta = -sin(radians(theta));
+	vec.x = ((mat.x * cosTheta) + (nsinTheta * mat.y) + (0.0 * mat.z));
+	vec.y = (((nsinTheta * -1) * mat.x) + (cosTheta * mat.y) + (mat.z * 0.0));
+	vec.z = ((mat.x * 0.0) + (mat.y * 0.0) + (mat.z * 1.0));
+	return (vec);
 }
 
-vec	rx_xyz(vec matrix, float theta)
+vec	rx_xyz(vec mat, float theta)
 {
-	vec	vector;
+	float	cosTheta;
+	float	nsinTheta;
+	vec		vec;
 
-	vector.x = ((1 * matrix.x) + (0 * matrix.y) + (matrix.z * 0));
-	vector.y = ((0 * matrix.x) + (cos(radians(theta)) * matrix.y) + (-sin(radians(theta)) * matrix.z));
-	vector.z = ((0 * matrix.x) + (matrix.y * sin(radians(theta))) + (matrix.z * cos(radians(theta))));
-	return (vector);
+	cosTheta = cos(radians(theta));
+	nsinTheta = -sin(radians(theta));
+	vec.x = ((1.0 * mat.x) + (0.0 * mat.y) + (mat.z * 0));
+	vec.y = ((0.0 * mat.x) + (cosTheta * mat.y) + (nsinTheta * mat.z));
+	vec.z = ((0.0 * mat.x) + (mat.y * (nsinTheta * -1)) + (mat.z * cosTheta));
+	return (vec);
 }
 
-vec	ry_xyz(vec matrix, float theta)
+vec	ry_xyz(vec mat, float theta)
 {
-	vec	vector;
+	float	cosTheta;
+	float	nsinTheta;
+	vec		vec;
 
-	vector.x = ((cos(radians(theta)) * (matrix.x) + 0 * matrix.y) + (sin(radians(theta)) * matrix.z));
-	vector.y = ((matrix.x * 0) + (matrix.y * 1) + (matrix.z * 0));
-	vector.z = ((-sin(radians(theta)) * matrix.x) + (0 * matrix.y) + (cos(radians(theta)) * matrix.z));
-	return (vector);
+	cosTheta = cos(radians(theta));
+	nsinTheta = -sin(radians(theta));
+	vec.x = ((cosTheta * (mat.x)) + (0.0 * mat.y) + ((nsinTheta * -1) * mat.z));
+	vec.y = ((mat.x * 0.0) + (mat.y * 1.0) + (mat.z * 0.0));
+	vec.z = ((nsinTheta * mat.x) + (0.0 * mat.y) + (cosTheta * mat.z));
+	return (vec);
 }
 
 vec	r_xyz(vec *new, angles theta)
@@ -204,9 +223,9 @@ vec	r_xyz(vec *new, angles theta)
 	vec	*matrix;
 
 	matrix = new;
-	*matrix = rx_xyz(*matrix, theta.x);
-	*matrix = rz_xyz(*matrix, theta.z);
 	*matrix = ry_xyz(*matrix, theta.y);
+	*matrix = rz_xyz(*matrix, theta.z);
+	*matrix = rx_xyz(*matrix, theta.x);
 	return (*matrix);
 }
 
@@ -218,12 +237,11 @@ void	initialiser(angles *degrees, pts_info *pts)
 	pts->r = 0;
 	pts->c = 0;
 	pts->add = 50.0;
-	degrees->x = 35.0;
+	degrees->x = 25.0;
 	degrees->y = 15.0;
-	degrees->z = 25.0;
+	degrees->z = 5.0;
 	return ;
 }
-
 void	draw_grid(t_data *m)
 {
 	vec			before;
@@ -244,12 +262,12 @@ void	draw_grid(t_data *m)
 			past = r_xyz(&((vec){m->pts->x_c + m->pts->add, m->pts->y_c, m->pts->line_add * m->map->arr[m->pts->r][m->pts->c + 1]}), *degrees);
 			if (m->pts->c <= m->map->c_cnt)
 				swap_points(m, &before, &past, &(gradient){m->map->arr[m->pts->r][m->pts->c], 
-				m->map->arr[m->pts->r][m->pts->c + 1], m->pts->x_c, 0xFF0000});//red horizontal 
+				m->map->arr[m->pts->r][m->pts->c + 1], m->pts->x_c, 0xFF0000, 0x9900FF}, 1);//red horizontal 
 			if (m->pts->r)
 			{
 				after = r_xyz(&((vec){m->pts->x_c, m->pts->y_c - m->pts->add, m->pts->line_add * m->map->arr[m->pts->r - 1][m->pts->c]}), *degrees);
-				swap_points(m, &before, &after, &(gradient){m->map->arr[m->pts->r][m->pts->c], 
-				m->map->arr[m->pts->r - 1][m->pts->c], m->pts->x_c, 0xFF0000});//blue vertical good
+				swap_points(m, &before, &after, &(gradient){m->map->arr[m->pts->r - 1][m->pts->c], 
+				m->map->arr[m->pts->r][m->pts->c], m->pts->x_c, 0xFF0000, 0x9900FF}, 1);//blue vert good
 			}
 			m->pts->c++;
 			m->pts->x_c += m->pts->add;
@@ -259,7 +277,7 @@ void	draw_grid(t_data *m)
 			before = r_xyz(&((vec){m->pts->x_c, m->pts->y_c, m->pts->line_add * m->map->arr[m->pts->r][m->map->c_cnt - 1]}), *degrees);
 			after = r_xyz(&((vec){m->pts->x_c, m->pts->y_c - m->pts->add, m->pts->line_add * m->map->arr[m->pts->r - 1][m->map->c_cnt - 1]}), *degrees);
 			swap_points(m, &before, &after, &(gradient){m->map->arr[m->pts->r][m->map->c_cnt - 1], 
-			m->map->arr[m->pts->r - 1][m->map->c_cnt - 1], m->pts->x_c, 0xFF0000});//red horizontal 
+			m->map->arr[m->pts->r - 1][m->map->c_cnt - 1], m->pts->x_c, 0x9900FF, 0xFF0000}, 0);//red horizontal 
 		}
 		m->pts->x_c = 620;
 		m->pts->y_c += m->pts->add;
@@ -267,7 +285,3 @@ void	draw_grid(t_data *m)
 	}
 	return ;
 }
-
-/*
-Use wolfram alpha to condense/simplify calculations
-*/
