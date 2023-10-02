@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 14:26:01 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/03/28 15:50:22 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:59:09 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	num_splits(const char *str, char c)
 			while (str[index] != c && str[index])
 			{
 				index++;
-			}	
+			}
 		}
 		else
 			index++;

@@ -6,13 +6,13 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 14:24:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/08/24 15:49:43 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:30:55 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static int		ft_columnlen(char **arr)
+static int	ft_columnlen(char **arr)
 {
 	int	i;
 
@@ -24,14 +24,15 @@ static int		ft_columnlen(char **arr)
 	return (i);
 }
 
-static int		ft_rowlen(char *path)
+static int	ft_rowlen(char *path)
 {
 	int		rows;
 	char	*result;
 	int		fd;
 
 	fd = open(path, O_RDWR);
-	if (fd == -1) {
+	if (fd == -1)
+	{
 		perror("Couldn't open the file. Try again.");
 		return (0);
 	}
@@ -39,54 +40,54 @@ static int		ft_rowlen(char *path)
 	rows = 0;
 	while (result)
 	{
-	    result = get_next_line(fd);
+		result = get_next_line(fd);
 		rows++;
 	}
 	close(fd);
 	return (rows);
 }
 
-details *read_map(char *filename)
+int	read_initialisation(read_utils *read, details *map, char *filename)
 {
-	char	**split_str;
-	int		fd;
-	char	*path;
-	details *map;
-	char	*eachline;
-
-	path = ft_strjoin("/Users/lnambaji/Documents/Cursus/fdf/", filename);
-	map = malloc(sizeof(details));
-	if (!map)
-		return (&(details){0, 0, 0, 0, NULL});
-	fd = open(path, O_RDWR);
-	if (fd == -1) {
-		perror("Couldn't open the file. Try again.");
-		return (&(details){0, 0, 0, 0, NULL});//return (*map);
-	}
-	map->r_pos = 0;
-	map->rowcount = ft_rowlen(path);
-	eachline = get_next_line(fd);
-	map->columncount = ft_columnlen(ft_split(eachline, ' '));
-	map->arr = malloc(sizeof(int *) * map->rowcount);
-	if (!map->arr || !map->rowcount || !map->columncount)
-		return (&(details){0, 0, 0, 0, NULL});//return (*map);
-	while (map->r_pos < map->rowcount)
+	read->path = ft_strjoin("/Users/lnambaji/Documents/Cursus/fdf/", filename);
+	read->fd = open(read->path, O_RDWR);
+	if (read->fd == -1)
 	{
-		map->arr[map->r_pos] = malloc(sizeof(int) * map->columncount);
-		split_str = ft_split(eachline, ' ');
-		if (!map->arr[map->r_pos] || !split_str)
-			return (&(details){0, 0, 0, 0, NULL});//return (*map);
-		map->c_pos = 0;
-		while (map->c_pos < map->columncount)
-		{
-			map->arr[map->r_pos][map->c_pos] = ft_atoi(split_str[map->c_pos]);
-			map->c_pos++;
-		}
-		free(split_str);
-		split_str = NULL;
-		eachline = get_next_line(fd);
-		map->r_pos++;
+		perror("Couldn't open the file. Try again.");
+		return (1);
 	}
-	close(fd);
+	map->r_pos = -1;
+	map->r_cnt = ft_rowlen(read->path);
+	read->eachline = get_next_line(read->fd);
+	map->c_cnt = ft_columnlen(ft_split(read->eachline, ' '));
+	map->arr = malloc(sizeof(int *) * map->r_cnt);
+	if (!map->arr || !map->r_cnt || !map->c_cnt)
+		return (1);
+	return (0);
+}
+
+details	*read_map(char *filename)
+{
+	details		*map;
+	read_utils	*read;
+
+	map = malloc(sizeof(details));
+	read = malloc(sizeof(read_utils));
+	if (!map || !read || read_initialisation(read, map, filename))
+		return (&(details){0, 0, 0, 0, NULL});
+	while (++map->r_pos < map->r_cnt)
+	{
+		map->arr[map->r_pos] = malloc(sizeof(int) * map->c_cnt);
+		read->split = ft_split(read->eachline, ' ');
+		if (!map->arr[map->r_pos] || !read->split)
+			return (&(details){0, 0, 0, 0, NULL});
+		map->c_pos = -1;
+		while (++map->c_pos < map->c_cnt)
+			map->arr[map->r_pos][map->c_pos] = ft_atoi(read->split[map->c_pos]);
+		free(read->split);
+		read->split = NULL;
+		read->eachline = get_next_line(read->fd);
+	}
+	close(read->fd);
 	return (map);
 }
