@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/02 15:57:00 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/09 12:41:47 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	initialisation(t_data *mlx, char *filepath)
 		return ;
 	mlx->map = read_map(filepath);
 	mlx_hook(mlx->win, 17, 0, end, mlx);
-	mlx_hook(mlx->win, 2, 1L<<0, keys_pressed, mlx);
+	mlx_hook(mlx->win, 2, 1L << 0, keys_pressed, mlx);
 	return ;
 }
 
