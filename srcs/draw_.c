@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/09 15:56:41 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:49:59 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,38 @@ t_fade	set(double z, double z_next, int x_c, int vert)
 	return ((t_fade){z, z_next, x_c, vert});
 }
 
+void	everything(t_data *m, t_fin *everything, t_angles *degrees, int option)
+{
+	if (option == 1)
+	{
+		*everything->after = store(m, 1, degrees);
+		*everything->before = store(m, 2, degrees);
+		*everything->faded = set(m->map->arr[m->pts->r][m->pts->c],
+		m->map->arr[m->pts->r][m->pts->c + 1], m->pts->x_c, 1);
+	}
+	else if (option == 2)
+	{
+		*everything->faded = set(m->map->arr[m->pts->r - 1][m->pts->c],
+		m->map->arr[m->pts->r][m->pts->c], m->pts->x_c, 1);
+		*everything->after = store(m, 3, degrees);
+		swap_points(m, everything->before, everything->after, everything->faded);
+	}
+	else if (option == 3)
+	{
+		*everything->before = store(m, 4, degrees);
+		*everything->after = store(m, 5, degrees);
+		*everything->faded = set(m->map->arr[m->pts->r][m->map->c_cnt - 1],
+		m->map->arr[m->pts->r - 1][m->map->c_cnt - 1], m->pts->x_c, 0);
+		swap_points(m, everything->before, everything->after, everything->faded);
+	}
+}
+
 void	draw_grid(t_data *m)
 {
-	t_vec		before;
-	t_vec		after;
+	t_fin		**fin;
 	t_angles	*degrees;
-	t_fade		faded;
 
+	fin
 	degrees = malloc(sizeof(t_angles));
 	if (!m->pts || !degrees)
 		return ;
@@ -73,28 +98,16 @@ void	draw_grid(t_data *m)
 		m->pts->c = -1;
 		while ((++m->pts->c) + 1 < m->map->c_cnt)
 		{
-			before = store(m, 1, degrees);
-			after = store(m, 2, degrees);
-			faded = set(m->map->arr[m->pts->r][m->pts->c], m->map->arr[m->pts->r][m->pts->c + 1], m->pts->x_c, 1);
+			everything(m, *fin, degrees, 1);
 			if (m->pts->c <= m->map->c_cnt)
-				swap_points(m, &before, &after, &faded);
+				swap_points(m, (*fin)->before, (*fin)->after, (*fin)->faded);
 			if (m->pts->r)
-			{
-				faded = set(m->map->arr[m->pts->r - 1][m->pts->c], m->map->arr[m->pts->r][m->pts->c], m->pts->x_c, 1);
-				after = store(m, 3, degrees);
-				swap_points(m, &before, &after, &faded);
-			}
+				everything(m, *fin, degrees, 2);
 			m->pts->x_c += m->pts->add;
 		}
 		if (m->pts->c + 1 == m->map->c_cnt && m->pts->r && m->pts->r < m->map->r_cnt)
-		{
-			before = store(m, 4, degrees);
-			after = store(m, 5, degrees);
-			faded = set(m->map->arr[m->pts->r][m->map->c_cnt - 1], m->map->arr[m->pts->r - 1][m->map->c_cnt - 1], m->pts->x_c, 0);
-			swap_points(m, &before, &after, &faded);
-		}
+			everything(m, *fin, degrees, 3);
 		m->pts->x_c = 620;
 		m->pts->y_c += m->pts->add;
 	}
-	return ;
 }
