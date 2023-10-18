@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/09 12:41:47 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/18 14:47:15 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	initialisation(t_data *mlx, char *filepath)
 	mlx->win = mlx_new_window(mlx->mlx, mlx->width, mlx->h, "fdf");
 	mlx->img = mlx_new_image(mlx->mlx, mlx->width, mlx->h);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bbp, &mlx->llen, &mlx->end);
-	mlx->pts = malloc(sizeof(pts_info));
-	mlx->map = malloc(sizeof(details));
+	mlx->pts = malloc(sizeof(t_pts_info));
+	mlx->map = malloc(sizeof(t_details));
 	if (!mlx->pts || !mlx->map)
 		return ;
 	mlx->map = read_map(filepath);
@@ -53,7 +53,7 @@ int	main(int argc, char **argv)
 	}
 	else
 		initialisation(mlx, argv[1]);
-	draw_grid(mlx);
+	draw_grid(mlx);//, mlx->fin);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
 	mlx_loop(mlx->mlx);
 	return (0);

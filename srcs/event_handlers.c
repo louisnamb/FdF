@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:04 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/02 15:44:52 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/18 15:03:51 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ int	end(t_data *hook)
 	mlx_destroy_window(hook->mlx, hook->win);
 	while (++i < hook->map->r_cnt)
 		free(hook->map->arr[i]);
+	free(hook->fin->after);
+	free(hook->fin->before);
+	free(hook->map);
+	free(hook->pts);
 	free(hook);
 	exit(0);
 	return (0);
@@ -27,6 +31,7 @@ int	end(t_data *hook)
 
 int	keys_pressed(int keycode, t_data *hook)
 {
+	printf("keycode: %d\n", keycode);
 	if (keycode == 53)
 		end(hook);
 	else if (keycode == 13)
@@ -37,7 +42,7 @@ int	keys_pressed(int keycode, t_data *hook)
 		hook->pts->y_c += 10;
 	else if (keycode == 2)
 		hook->pts->x_c += 10;
-	draw_grid(hook);
+	draw_grid(hook, hook->fin);
 	return (0);
 }
 
