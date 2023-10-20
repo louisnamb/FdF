@@ -50,7 +50,7 @@ int	add_colour(int start, int end, double percentage)
 	return ((red << 16) | (green << 8) | blue);
 }
 
-int	shader(fade *color, int start, int end, int curr)
+int	shader(t_fade *color, int start, int end, int curr)
 {
 	double	greater;
 	int		max;
@@ -58,7 +58,7 @@ int	shader(fade *color, int start, int end, int curr)
 	int		tmp;
 
 	max = 0xFF0000;
-	low = 0x9900FF;
+	low = 0xFFFFFF;
 	greater = 0.0;
 	if (color->curr_z > color->next_z && color->vert)
 	{

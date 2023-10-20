@@ -47,7 +47,7 @@ static int	ft_rowlen(char *path)
 	return (rows);
 }
 
-int	read_initialisation(read_utils *read, details *map, char *filename)
+int	read_initialisation(t_read_utils *read, t_details *map, char *filename)
 {
 	read->path = ft_strjoin("/Users/lnambaji/Documents/Cursus/fdf/", filename);
 	read->fd = open(read->path, O_RDWR);
@@ -66,21 +66,21 @@ int	read_initialisation(read_utils *read, details *map, char *filename)
 	return (0);
 }
 
-details	*read_map(char *filename)
+t_details	*read_map(char *filename)
 {
-	details		*map;
-	read_utils	*read;
+	t_details		*map;
+	t_read_utils	*read;
 
-	map = malloc(sizeof(details));
-	read = malloc(sizeof(read_utils));
+	map = malloc(sizeof(t_details));
+	read = malloc(sizeof(t_read_utils));
 	if (!map || !read || read_initialisation(read, map, filename))
-		return (&(details){0, 0, 0, 0, NULL});
+		return (&(t_details){0, 0, 0, 0, NULL});
 	while (++map->r_pos < map->r_cnt)
 	{
 		map->arr[map->r_pos] = malloc(sizeof(int) * map->c_cnt);
 		read->split = ft_split(read->eachline, ' ');
 		if (!map->arr[map->r_pos] || !read->split)
-			return (&(details){0, 0, 0, 0, NULL});
+			return (&(t_details){0, 0, 0, 0, NULL});
 		map->c_pos = -1;
 		while (++map->c_pos < map->c_cnt)
 			map->arr[map->r_pos][map->c_pos] = ft_atoi(read->split[map->c_pos]);

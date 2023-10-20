@@ -20,29 +20,31 @@ int	end(t_data *hook)
 	mlx_destroy_window(hook->mlx, hook->win);
 	while (++i < hook->map->r_cnt)
 		free(hook->map->arr[i]);
-	free(hook->fin->after);
-	free(hook->fin->before);
+	free(&hook->fin->after);
+	free(&hook->fin->before);
+	free(&hook->fin->faded);
+	free(hook->fin);
 	free(hook->map);
 	free(hook->pts);
-	free(hook);
+	free(hook->degrees);
 	exit(0);
 	return (0);
 }
 
 int	keys_pressed(int keycode, t_data *hook)
 {
-	printf("keycode: %d\n", keycode);
+//	printf("keycode: %d\n", keycode);
 	if (keycode == 53)
 		end(hook);
-	else if (keycode == 13)
-		hook->pts->y_c -= 10;
-	else if (keycode == 0)
-		hook->pts->x_c -= 10;
-	else if (keycode == 1)
-		hook->pts->y_c += 10;
-	else if (keycode == 2)
-		hook->pts->x_c += 10;
-	draw_grid(hook, hook->fin);
+	else if (keycode == 13) //W
+		hook->pts->move_v--;
+	else if (keycode == 0) //A
+		hook->pts->move_h++;
+	else if (keycode == 1) //S
+		hook->pts->move_h++;
+	else if (keycode == 2) //D
+		hook->pts->move_v++;
+	draw_grid(hook);//, hook->fin);
 	return (0);
 }
 

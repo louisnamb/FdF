@@ -25,16 +25,25 @@ void	colorise(t_data *data, int x, int y, int colour)
 void	initialisation(t_data *mlx, char *filepath)
 {
 	mlx->mlx = mlx_init();
-	mlx->width = 1920;
-	mlx->h = 1080;
+	mlx->pts = malloc(sizeof(t_pts_info));
+	mlx->map = malloc(sizeof(t_details));
+	mlx->degrees = malloc(sizeof(t_angles));
+	mlx->fin = malloc(sizeof(t_fin));
+	mlx->fin->after = malloc(sizeof(t_vec));
+	mlx->fin->before = malloc(sizeof(t_vec));
+	mlx->fin->faded = malloc(sizeof(t_fade));
 	mlx->win = mlx_new_window(mlx->mlx, mlx->width, mlx->h, "fdf");
 	mlx->img = mlx_new_image(mlx->mlx, mlx->width, mlx->h);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bbp, &mlx->llen, &mlx->end);
-	mlx->pts = malloc(sizeof(t_pts_info));
-	mlx->map = malloc(sizeof(t_details));
-	if (!mlx->pts || !mlx->map)
-		return ;
 	mlx->map = read_map(filepath);
+	if (!mlx->pts || !mlx->degrees || !mlx->fin || !mlx->pts)
+		return ;
+	mlx->pts->move_h = 0;
+	mlx->pts->move_v = 0;
+	if (!mlx->map || !mlx->fin->after || !mlx->fin->before || !mlx->fin->faded)
+		return ;
+	mlx->width = 1920;
+	mlx->h = 1080;
 	mlx_hook(mlx->win, 17, 0, end, mlx);
 	mlx_hook(mlx->win, 2, 1L << 0, keys_pressed, mlx);
 	return ;
@@ -53,7 +62,7 @@ int	main(int argc, char **argv)
 	}
 	else
 		initialisation(mlx, argv[1]);
-	draw_grid(mlx);//, mlx->fin);
+	draw_grid(mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
 	mlx_loop(mlx->mlx);
 	return (0);

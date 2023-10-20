@@ -12,10 +12,10 @@
 
 #include "fdf.h"
 
-int	initialiser(t_angles *degrees, t_pts_info *pts, t_fin *fin)
+int	initialiser(t_angles *degrees, t_pts_info *pts)
 {
-	pts->x_c = 620;
-	pts->y_c = 100;
+	pts->x_c = 620 + (pts->move_h * 10);
+	pts->y_c = 100 + (pts->move_v * 10);
 	pts->line_add = 5;
 	pts->r = -1;
 	pts->c = -1;
@@ -23,11 +23,6 @@ int	initialiser(t_angles *degrees, t_pts_info *pts, t_fin *fin)
 	degrees->x = 25.0;
 	degrees->y = 15.0;
 	degrees->z = 5.0;
-	fin->after = malloc(sizeof(t_vec));
-	fin->before = malloc(sizeof(t_vec));
-	fin->faded = malloc(sizeof(t_fade));
-	if (!fin->after || !fin->before || !fin->faded)
-		return (1);
 	return (0);
 }
 
@@ -93,26 +88,21 @@ void	everything(t_data *m, t_fin *fin, t_angles *degrees, int option)
 
 void	draw_grid(t_data *m)
 {
-	t_angles	*degrees;
-
-	degrees = malloc(sizeof(t_angles));
-	m->fin = malloc(sizeof(t_fin));
-	if (!m->pts || !degrees || !m->fin || initialiser(degrees, m->pts, m->fin))
-		return ;
+	initialiser(m->degrees, m->pts);
 	while ((++m->pts->r) + 1 <= m->map->r_cnt)
 	{
 		m->pts->c = -1;
 		while ((++m->pts->c) + 1 < m->map->c_cnt)
 		{
-			everything(m, m->fin, degrees, 1);
+			everything(m, m->fin, m->degrees, 1);
 			if (m->pts->c <= m->map->c_cnt)
 				swap_points(m, m->fin->before, m->fin->after, m->fin->faded);
 			if (m->pts->r)
-				everything(m, m->fin, degrees, 2);
+				everything(m, m->fin, m->degrees, 2);
 			m->pts->x_c += m->pts->add;
 		}
 		if (m->pts->c + 1 == m->map->c_cnt && m->pts->r)
-			everything(m, m->fin, degrees, 3);
+			everything(m, m->fin, m->degrees, 3);
 		m->pts->x_c = 620;
 		m->pts->y_c += m->pts->add;
 	}

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../includ/fdf.h"
 
 void	draw_vertical(t_data *mlx, t_vec *start, t_vec *end, int color)
 {
