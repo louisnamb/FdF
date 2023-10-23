@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/23 12:53:09 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/23 16:06:29 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	initialiser(t_angles *degrees, t_pts_info *pts, t_fin *fin)
 {
-	pts->x_c = 620;;// + (pts->move_x * 10);
-	pts->y_c = 100;;// + (pts->move_y * 10);
+	pts->x_c = 620;
+	pts->y_c = 100;
 	pts->line_add = 5;
 	pts->r = -1;
 	pts->c = -1;
@@ -23,7 +23,7 @@ int	initialiser(t_angles *degrees, t_pts_info *pts, t_fin *fin)
 	degrees->x = 25.0;
 	degrees->y = 15.0;
 	degrees->z = 5.0;
-	if (!pts->move_x && !pts->move_y)
+	if (!pts->mx && !pts->my)
 	{
 		fin->after = malloc(sizeof(t_vec));
 		fin->before = malloc(sizeof(t_vec));

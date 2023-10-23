@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 13:13:28 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/23 11:36:58 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/23 16:17:15 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,24 @@ void	draw_b_l(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
 {
 	t_bresenham	low;
 
-	low.deltax = (int)end->x - start->x;
-	low.deltay = (int)end->y - start->y;
+	low.d_x = (int)end->x - start->x;
+	low.d_y = (int)end->y - start->y;
 	low.variable_i = 1;
-	if (low.deltay < 0)
+	if (low.d_y < 0)
 	{
 		low.variable_i = -1;
-		low.deltay = -low.deltay;
+		low.d_y = -low.d_y;
 	}
-	low.diff = (2 * low.deltay) - low.deltax;
+	low.diff = (2 * low.d_y) - low.d_x;
 	low.y = (int)start->y;
 	low.x = (int)start->x - 1;
 	while (++low.x < end->x)
 	{
-		colorise(mlx, low.x + mlx->pts->move_x, low.y + mlx->pts->move_y, shader(color, start->x, end->x, low.x));
+		colorise(mlx, low.x + mlx->pts->mx, low.y + mlx->pts->my,
+			shader(color, start->x, end->x, low.x));
 		if (low.diff > 0)
-		{
 			low.y = low.y + low.variable_i;
-			low.diff = low.diff + (2 * (low.deltay - low.deltax));
-		}
-		else
-			low.diff = low.diff + 2 * low.deltay;
+		low.diff = low.diff + (2 * (low.d_y - ((low.diff > 0) * low.d_x)));
 	}
 	return ;
 }
@@ -60,27 +57,24 @@ void	draw_b_h(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
 {
 	t_bresenham	high;
 
-	high.deltax = (int)(end->x - start->x);
-	high.deltay = (int)(end->y - start->y);
+	high.d_x = (int)(end->x - start->x);
+	high.d_y = (int)(end->y - start->y);
 	high.variable_i = 1;
-	if (high.deltax < 0)
+	if (high.d_x < 0)
 	{
 		high.variable_i = -1;
-		high.deltax = -1 * high.deltax;
+		high.d_x = -1 * high.d_x;
 	}
 	high.y = (int)start->y - 1;
 	high.x = (int)start->x;
-	high.diff = (2 * high.deltax) - high.deltay;
+	high.diff = (2 * high.d_x) - high.d_y;
 	while (++high.y < end->y)
 	{
-		colorise(mlx, high.x + mlx->pts->move_x, high.y + mlx->pts->move_y, shader(color, start->y, end->y, high.y));
+		colorise(mlx, high.x + mlx->pts->mx, high.y + mlx->pts->my,
+			shader(color, start->y, end->y, high.y));
 		if (high.diff > 0)
-		{
 			high.x = high.x + high.variable_i;
-			high.diff = high.diff + (2 * (high.deltax - high.deltay));
-		}
-		else
-			high.diff = high.diff + 2 * high.deltax;
+		high.diff = high.diff + (2 * (high.d_x - ((high.diff > 0) * high.d_y)));
 	}
 	return ;
 }
