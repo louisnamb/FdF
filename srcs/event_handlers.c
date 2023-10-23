@@ -6,7 +6,7 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:04 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/18 15:03:51 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/23 13:08:42 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,33 +18,33 @@ int	end(t_data *hook)
 
 	i = -1;
 	mlx_destroy_window(hook->mlx, hook->win);
+	mlx_destroy_image(hook->mlx, hook->img);
 	while (++i < hook->map->r_cnt)
 		free(hook->map->arr[i]);
-	free(&hook->fin->after);
-	free(&hook->fin->before);
-	free(&hook->fin->faded);
-	free(hook->fin);
+	free(hook->fin->after);
+	free(hook->fin->faded);
+	free(hook->fin->before);
+	free(hook->degrees);
 	free(hook->map);
 	free(hook->pts);
-	free(hook->degrees);
+	free(hook);
 	exit(0);
 	return (0);
 }
 
 int	keys_pressed(int keycode, t_data *hook)
 {
-//	printf("keycode: %d\n", keycode);
 	if (keycode == 53)
 		end(hook);
 	else if (keycode == 13) //W
-		hook->pts->move_v--;
-	else if (keycode == 0) //A
-		hook->pts->move_h++;
-	else if (keycode == 1) //S
-		hook->pts->move_h++;
-	else if (keycode == 2) //D
-		hook->pts->move_v++;
-	draw_grid(hook);//, hook->fin);
+		hook->pts->move_y += -20;
+	else if (keycode == 0) // A
+		hook->pts->move_x += -20;
+	else if (keycode == 1) // S
+		hook->pts->move_y += 20;
+	else if (keycode == 2) // D
+		hook->pts->move_x += 20;
+	draw_grid(hook);
 	return (0);
 }
 

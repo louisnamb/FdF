@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 13:13:28 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/09 15:47:53 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/23 11:36:58 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includ/fdf.h"
+#include "fdf.h"
 
 void	draw_vertical(t_data *mlx, t_vec *start, t_vec *end, int color)
 {
@@ -44,7 +44,7 @@ void	draw_b_l(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
 	low.x = (int)start->x - 1;
 	while (++low.x < end->x)
 	{
-		colorise(mlx, low.x, low.y, shader(color, start->x, end->x, low.x));
+		colorise(mlx, low.x + mlx->pts->move_x, low.y + mlx->pts->move_y, shader(color, start->x, end->x, low.x));
 		if (low.diff > 0)
 		{
 			low.y = low.y + low.variable_i;
@@ -73,7 +73,7 @@ void	draw_b_h(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
 	high.diff = (2 * high.deltax) - high.deltay;
 	while (++high.y < end->y)
 	{
-		colorise(mlx, high.x, high.y, shader(color, start->y, end->y, high.y));
+		colorise(mlx, high.x + mlx->pts->move_x, high.y + mlx->pts->move_y, shader(color, start->y, end->y, high.y));
 		if (high.diff > 0)
 		{
 			high.x = high.x + high.variable_i;

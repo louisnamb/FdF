@@ -6,16 +6,16 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/18 14:49:43 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:53:09 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	initialiser(t_angles *degrees, t_pts_info *pts)
+int	initialiser(t_angles *degrees, t_pts_info *pts, t_fin *fin)
 {
-	pts->x_c = 620 + (pts->move_h * 10);
-	pts->y_c = 100 + (pts->move_v * 10);
+	pts->x_c = 620;;// + (pts->move_x * 10);
+	pts->y_c = 100;;// + (pts->move_y * 10);
 	pts->line_add = 5;
 	pts->r = -1;
 	pts->c = -1;
@@ -23,6 +23,14 @@ int	initialiser(t_angles *degrees, t_pts_info *pts)
 	degrees->x = 25.0;
 	degrees->y = 15.0;
 	degrees->z = 5.0;
+	if (!pts->move_x && !pts->move_y)
+	{
+		fin->after = malloc(sizeof(t_vec));
+		fin->before = malloc(sizeof(t_vec));
+		fin->faded = malloc(sizeof(t_fade));
+	}
+	if (!fin->after || !fin->before || !fin->faded)
+		return (1);
 	return (0);
 }
 
@@ -88,7 +96,9 @@ void	everything(t_data *m, t_fin *fin, t_angles *degrees, int option)
 
 void	draw_grid(t_data *m)
 {
-	initialiser(m->degrees, m->pts);
+	ft_bzero(m->addr, m->width * m->h * (m->bbp / 8));
+	if (initialiser(m->degrees, m->pts, m->fin))
+		return ;
 	while ((++m->pts->r) + 1 <= m->map->r_cnt)
 	{
 		m->pts->c = -1;
@@ -106,4 +116,6 @@ void	draw_grid(t_data *m)
 		m->pts->x_c = 620;
 		m->pts->y_c += m->pts->add;
 	}
+	mlx_put_image_to_window(m->mlx, m->win, m->img, 0, 0);
+	draw_menu(m);
 }
