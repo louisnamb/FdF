@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftt.h                                           :+:      :+:    :+:   */
+/*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lnambaji <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:14:34 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/03/09 12:23:28 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:28:31 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 # define LIBFT_H
 
 # include <string.h>
-# include <stdlib.h>
-# include <unistd.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5000

@@ -6,17 +6,23 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:46:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/09 15:54:30 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:45:37 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
-#include "mlx.h"
+#include "../mlx/mlx.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
 #include <fcntl.h>
+
+typedef struct everything {
+	struct vector	*before;
+	struct vector	*after;
+	struct color	*faded;
+} t_fin;
 
 typedef struct map_info {
 	int		r_cnt;
@@ -33,6 +39,8 @@ typedef struct points {
 	int		r;
 	int		c;
 	int		add;
+	int		my;
+	int		mx;
 }	t_pts_info;
 
 typedef struct shorten
@@ -45,17 +53,20 @@ typedef struct shorten
 }	t_shorten;
 
 typedef struct window_info {
-	void			*mlx;
-	void			*img;
-	void			*win;
-	void			*addr;
-	int				bbp;
-	int				llen;
-	int				end;
-	int				width;
-	int				h;
-	struct map_info	*map;
-	struct points	*pts;
+	void				*mlx;
+	void				*img;
+	void				*win;
+	void				*addr;
+	int					bbp;
+	int					llen;
+	int					end;
+	int					width;
+	int					h;
+	int					min;
+	struct map_info		*map;
+	struct points		*pts;
+	struct everything	*fin;
+	struct degrees		*degrees;
 }	t_data;
 
 typedef struct read {
@@ -66,8 +77,8 @@ typedef struct read {
 }	t_read_utils;
 
 typedef struct bresenham {
-	int	deltax;
-	int	deltay;
+	int	d_x;
+	int	d_y;
 	int	diff;
 	int	x;
 	int	y;
@@ -102,13 +113,16 @@ typedef struct degrees {
 
 int			absolute(int result);
 void		colorise(t_data *data, int x, int y, int colour);
-void		draw_b_l(t_data *mlx, t_vec *start, t_vec *end, t_fade *color);
-void		draw_b_h(t_data *mlx, t_vec *start, t_vec *end, t_fade *color);
+void		draw_b_l(t_data *mlx, t_vec *start, t_vec *end);
+void		draw_b_h(t_data *mlx, t_vec *start, t_vec *end);
 void		draw_vertical(t_data *mlx, t_vec *start, t_vec *end, int color);
-void		draw_grid(t_data *mlx);
+void		draw_grid(t_data *m);
+void		draw_menu(t_data *param);
 int			end(t_data *hook);
+int			find_min(int **map, int which, int r_lim, int c_lim);
 char		*ft_strjoin(char const *s1, char const *s2);
 int			ft_atoi(const char *str);
+void		ft_bzero(void *s, size_t n);
 int			ft_isdigit(int c);
 void		initialisation(t_data *mlx, char *filepath);
 int			key_hook(int keycode, t_data *hook);
@@ -121,5 +135,5 @@ t_vec		r_xyz(t_vec *new, t_angles theta);
 t_vec		rx_xyz(t_vec mat, float theta);
 t_vec		ry_xyz(t_vec mat, float theta);
 t_vec		rz_xyz(t_vec mat, float theta);
-int			shader(t_fade *color, int start, int end, int curr);
-void		swap_points(t_data *mlx, t_vec *start, t_vec *end, t_fade *color);
+int			shader(t_data *mlx, int start, int end, int curr);
+void		swap_points(t_data *mlx, t_vec *start, t_vec *end);
