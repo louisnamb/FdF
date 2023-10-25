@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 11:55:20 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/23 16:06:29 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:45:14 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../include/fdf.h"
 
 int	initialiser(t_angles *degrees, t_pts_info *pts, t_fin *fin)
 {
@@ -82,7 +82,7 @@ void	everything(t_data *m, t_fin *fin, t_angles *degrees, int option)
 		*fin->faded = set(m->map->arr[m->pts->r - 1][m->pts->c],
 				m->map->arr[m->pts->r][m->pts->c], m->pts->x_c, 1);
 		*fin->after = store(m, 3, degrees);
-		swap_points(m, fin->before, fin->after, fin->faded);
+		swap_points(m, fin->before, fin->after);
 	}
 	else if (option == 3)
 	{
@@ -90,7 +90,7 @@ void	everything(t_data *m, t_fin *fin, t_angles *degrees, int option)
 		*fin->after = store(m, 5, degrees);
 		*fin->faded = set(m->map->arr[m->pts->r][m->map->c_cnt - 1],
 				m->map->arr[m->pts->r - 1][m->map->c_cnt - 1], m->pts->x_c, 0);
-		swap_points(m, fin->before, fin->after, fin->faded);
+		swap_points(m, fin->before, fin->after);
 	}
 }
 
@@ -106,7 +106,7 @@ void	draw_grid(t_data *m)
 		{
 			everything(m, m->fin, m->degrees, 1);
 			if (m->pts->c <= m->map->c_cnt)
-				swap_points(m, m->fin->before, m->fin->after, m->fin->faded);
+				swap_points(m, m->fin->before, m->fin->after);
 			if (m->pts->r)
 				everything(m, m->fin, m->degrees, 2);
 			m->pts->x_c += m->pts->add;

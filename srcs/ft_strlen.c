@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:22:19 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/02 15:58:11 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:27:12 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../include/ft_printf.h"
 
 size_t	ft_strlen(const char *s)
 {

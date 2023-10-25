@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:50:33 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/23 12:52:33 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:25:23 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../include/fdf.h"
 
 void	ft_bzero(void *s, size_t n)
 {

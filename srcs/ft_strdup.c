@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 10:06:48 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/02 15:59:28 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:26:12 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 char	*ft_strdup(const char *s1)
 {

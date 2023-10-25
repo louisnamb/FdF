@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 14:24:29 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/20 12:50:05 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:46:13 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../include/fdf.h"
 
 static int	ft_columnlen(char **arr)
 {
@@ -90,4 +90,28 @@ t_details	*read_map(char *filename)
 	}
 	close(read->fd);
 	return (map);
+}
+
+int	find_min(int **map, int which, int r_lim, int c_lim)
+{
+	int	min;
+	int	r;
+	int	c;
+
+	r = 0;
+	min = map[0][0];
+	while (++r < r_lim)
+	{
+		c = -1;
+		while (++c < c_lim)
+		{
+			if (which && map[r][c] < min)
+				min = map[r][c];
+			if (!which && map[r][c] > min)
+				min = map[r][c];
+			c++;
+		}
+		r++;
+	}
+	return (min);
 }

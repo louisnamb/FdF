@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 10:18:28 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/04/11 15:54:52 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:27:51 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../include/ft_printf.h"
 
 unsigned int	ft_uputnbr_fd(unsigned int n, int fd, int total, int *sum)
 {

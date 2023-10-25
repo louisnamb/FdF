@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 13:13:28 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/23 16:17:15 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:44:49 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../include/fdf.h"
 
 void	draw_vertical(t_data *mlx, t_vec *start, t_vec *end, int color)
 {
@@ -27,7 +27,7 @@ void	draw_vertical(t_data *mlx, t_vec *start, t_vec *end, int color)
 	return ;
 }
 
-void	draw_b_l(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
+void	draw_b_l(t_data *mlx, t_vec *start, t_vec *end)
 {
 	t_bresenham	low;
 
@@ -45,7 +45,7 @@ void	draw_b_l(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
 	while (++low.x < end->x)
 	{
 		colorise(mlx, low.x + mlx->pts->mx, low.y + mlx->pts->my,
-			shader(color, start->x, end->x, low.x));
+			shader(mlx, start->x, end->x, low.x));
 		if (low.diff > 0)
 			low.y = low.y + low.variable_i;
 		low.diff = low.diff + (2 * (low.d_y - ((low.diff > 0) * low.d_x)));
@@ -53,7 +53,7 @@ void	draw_b_l(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
 	return ;
 }
 
-void	draw_b_h(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
+void	draw_b_h(t_data *mlx, t_vec *start, t_vec *end)
 {
 	t_bresenham	high;
 
@@ -71,7 +71,7 @@ void	draw_b_h(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
 	while (++high.y < end->y)
 	{
 		colorise(mlx, high.x + mlx->pts->mx, high.y + mlx->pts->my,
-			shader(color, start->y, end->y, high.y));
+			shader(mlx, start->y, end->y, high.y));
 		if (high.diff > 0)
 			high.x = high.x + high.variable_i;
 		high.diff = high.diff + (2 * (high.d_x - ((high.diff > 0) * high.d_y)));
@@ -79,23 +79,23 @@ void	draw_b_h(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
 	return ;
 }
 
-void	swap_points(t_data *mlx, t_vec *start, t_vec *end, t_fade *color)
+void	swap_points(t_data *mlx, t_vec *start, t_vec *end)
 {
 	if (start->x == end->x)
 		draw_vertical(mlx, start, end, 0xFF0000);
 	if (absolute(end->y - start->y) < absolute(end->x - start->x))
 	{
 		if (start->x > end->x)
-			draw_b_l(mlx, end, start, color);
+			draw_b_l(mlx, end, start);
 		else
-			draw_b_l(mlx, start, end, color);
+			draw_b_l(mlx, start, end);
 	}
 	else
 	{
 		if (start->y > end->y)
-			draw_b_h(mlx, end, start, color);
+			draw_b_h(mlx, end, start);
 		else
-			draw_b_h(mlx, start, end, color);
+			draw_b_h(mlx, start, end);
 	}
 	return ;
 }

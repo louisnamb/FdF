@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 13:11:17 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/09 15:55:06 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:25:23 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../include/fdf.h"
 
 float	radians(float degrees)
 {

@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 13:15:33 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/20 12:30:30 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:40:58 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../include/fdf.h"
 
 int	absolute(int result)
 {
@@ -50,28 +50,25 @@ int	add_colour(int start, int end, double percentage)
 	return ((red << 16) | (green << 8) | blue);
 }
 
-int	shader(t_fade *color, int start, int end, int curr)
+int	shader(t_data *m, int start, int end, int curr)
 {
 	double	greater;
 	int		max;
 	int		low;
-	int		tmp;
 
 	max = 0xFF0000;
 	low = 0xFFFFFF;
-	greater = 0.0;
-	if (color->curr_z > color->next_z && color->vert)
+	greater = m->min;
+	if (m->fin->faded->curr_z > m->fin->faded->next_z && m->fin->faded->vert)
 	{
-		greater = color->curr_z;
-		tmp = max;
-		max = low;
-		low = tmp;
+		greater = m->fin->faded->curr_z;
+		return (add_colour(max, low, find_percent(start, end, curr)));
 	}
 	else
-		greater = color->next_z;
-	if (greater == 0.0)
+		greater = m->fin->faded->next_z;
+	if (greater == m->min)
 		return (low);
-	else if (color->curr_z == color->next_z)
+	else if (m->fin->faded->curr_z == m->fin->faded->next_z)
 		return (max);
 	else
 		return (add_colour(low, max, find_percent(start, end, curr)));

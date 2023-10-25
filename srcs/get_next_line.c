@@ -10,8 +10,8 @@
 /*																			  */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include "fdf.h"
+#include "../include/get_next_line.h"
+#include "../include/fdf.h"
 
 char	*ft_free(char **data, char *new)
 {

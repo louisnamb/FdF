@@ -6,11 +6,12 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 17:05:04 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/09/29 16:16:42 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:29:23 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
+#include <unistd.h>
 
 void	ft_putnbr_fd(int n, int fd)
 {
@@ -30,7 +31,6 @@ void	ft_putnbr_fd(int n, int fd)
 		ft_putchar_fd(n + '0', fd);
 }
 /*
-#include <unistd.h>
 #include <stdio.h>
 
 int main()

@@ -6,11 +6,11 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/17 09:51:35 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/02 15:58:20 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:25:51 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/libft.h"
 
 int	ft_isdigit(int c)
 {

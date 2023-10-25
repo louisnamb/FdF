@@ -6,30 +6,23 @@
 /*   By: lnambaji <lnambaji@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 13:22:47 by lnambaji          #+#    #+#             */
-/*   Updated: 2023/10/23 16:06:35 by lnambaji         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:31:23 by lnambaji         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../include/fdf.h"
 
 void	draw_menu(t_data *param)
 {
 	char	*menu;
 
-	menu = "press WASD to move";
-	mlx_string_put(param->mlx, param->win, 20, 10, 0xffffff, menu);
-	menu = "press ESC or RED-X to exit";
-	mlx_string_put(param->mlx, param->win, 20, 45, 0xffffff, menu);
-	menu = "press RED-X of window to e";
-	mlx_string_put(param->mlx, param->win, 20, 80, 0xffffff, menu);
-	menu = "PRESS [C] TO CHANGE COLORS MODE";
+	menu = "press W-A-S-D to move";
 	mlx_string_put(param->mlx, param->win, 20, 115, 0xffffff, menu);
-	menu = "PRESS [8/2] KEYS FOR Z-SCALING THE MODEL";
-	mlx_string_put(param->mlx, param->win, 20, 150, 0xffffff, menu);
-	menu = "PRESS [4/6] KEYS FOR ROTATING THE MODEL";
-	mlx_string_put(param->mlx, param->win, 20, 185, 0xffffff, menu);
-	menu = "MOVE PICTURE BY PRESSING ARROW KEYS";
-	mlx_string_put(param->mlx, param->win, 20, 220, 0xffffff, menu);
+	menu = "press ESC or RED-X to exit";
+	mlx_string_put(param->mlx, param->win, 20, 140, 0xffffff, menu);
+	menu = "press R to reset the map";
+	mlx_string_put(param->mlx, param->win, 20, 175, 0xffffff, menu);
+	return ;
 }
 
 void	colorise(t_data *data, int x, int y, int colour)
@@ -59,6 +52,7 @@ void	initialisation(t_data *mlx, char *filepath)
 	mlx->pts->mx = 0;
 	mlx->pts->my = 0;
 	mlx->map = read_map(filepath);
+	mlx->min = find_min(mlx->map->arr, 1, mlx->map->r_cnt, mlx->map->c_cnt);
 	mlx_hook(mlx->win, 17, 0, end, mlx);
 	mlx_hook(mlx->win, 2, 1L << 0, keys_pressed, mlx);
 	return ;
